@@ -27,9 +27,11 @@ client = discord.Client()
 @client.event
 async def on_message(message):
     if message.content == ".help":
-        embed = discord.Embed(title="Central de Ajuda do TrialsBot", description="Alguns comandos para facilitar a moderação")
-        embed.add_field(name=".hello", value="Olá")
-        embed.add_field(name=".stats", value="Escreva um código de partida para pegar as informações")
+        embed = discord.Embed(title="Central de Ajuda do TrialsBot", description='Alguns comandos para facilitar a moderação \n Lembrando que todos os comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n'
+                                                                                 'stats-paladins ou stats-smite')
+        embed.add_field(name=".stats", value="Retorna o arquivo de texto com todos os stats da partida")
+        embed.add_field(name=".id", value="Retorna os Id's de todos os jogadores, com exceção dos perfil privados")
+        embed.add_field(name=".replay", value="Renorna os players da partida pra conferência, junto com a informação de caso a partida tenha Replay ou não")
         await message.channel.send(content=None, embed=embed)
 
     if message.content.find(".stats") != -1: #Retorna stats.txt no discord
