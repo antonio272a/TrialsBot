@@ -98,7 +98,7 @@ async def on_message(message):
         user_id = message.author.id
         channel_id = message.channel.id
         ConfereUserId(user_id, channel_id)
-        removed_channel_id = ReconhecerComando(mensagem, ",removechannelid ")
+        removed_channel_id = ReconhecerComando(mensagem, ".removechannelid ")
         RemoveChannelIdWhitelist(channel_id, removed_channel_id)
         Envia_Msg(channel_id, "Canal removido com sucesso")
 
@@ -108,7 +108,7 @@ async def on_message(message):
         user_id = message.author.id
         channel_id = message.channel.id
         ConfereUserId(user_id, channel_id)
-        added_channel_id = ReconhecerComando(mensagem, ",addchannelid ")
+        added_channel_id = ReconhecerComando(mensagem, ".addchannelid ")
         AddChannelIdWhitelist(channel_id, added_channel_id)
         Envia_Msg(channel_id, "Canal adicionado com sucesso")
 
