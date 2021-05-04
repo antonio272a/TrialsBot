@@ -1,6 +1,13 @@
 import discord
 import pyrez
 import asyncio
+import json
+from json import JSONEncoder
+
+
+class CustomEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
 
 #Código para resgatar o token do Bot
 def read_token():
@@ -42,7 +49,7 @@ async def on_message(message):
         await message.channel.send(content="Comando recebido", embed=None)
         mensagem = message.content
         channelId = message.channel.id
-        retorno = Refatorando(channelId, mensagem)
+        retorno = RefatorandoCmdMods(channelId, mensagem)
         game = retorno[0]
         match_id = retorno[1]
         PegarStats(match_id, game)
@@ -53,7 +60,7 @@ async def on_message(message):
         await message.channel.send(content="Comando recebido", embed=None)
         mensagem = message.content
         channelId = message.channel.id
-        retorno = Refatorando(channelId, mensagem)
+        retorno = RefatorandoCmdMods(channelId, mensagem)
         game = retorno[0]
         match_id = retorno[1]
         details_players = PegarId(match_id, game)
@@ -63,25 +70,55 @@ async def on_message(message):
         await message.channel.send(content="Comando recebido", embed=None)
         mensagem = message.content
         channelId = message.channel.id
-        retorno = Refatorando(channelId, mensagem)
+        retorno = RefatorandoCmdMods(channelId, mensagem)
         game = retorno[0]
         match_id = retorno[1]
         details_players = PegarReplay(match_id, game)
         Envia_Msg(channelId, details_players)
 
+    if message.content.find(".addthischannel") != -1:
+        await message.channel.send("Comando recebido")
+        user_id = message.author.id
+        channel_id = message.channel.id
+        ConfereUserId(user_id, channel_id)
+        AddChannelIdWhitelist(channel_id, channel_id)
+        Envia_Msg(channel_id, "Canal adicionado com Sucesso")
+
+    if message.content.find(".removethischannel") != -1:
+        await message.channel.send("Comando recebido")
+        user_id = message.author.id
+        channel_id = message.channel.id
+        ConfereUserId(user_id, channel_id)
+        RemoveChannelIdWhitelist(channel_id, channel_id)
+        Envia_Msg(channel_id, "Canal removido com sucesso")
+
+    if message.content.find(".removechannelid") != -1:
+        await message.channel.send("Comando recebido")
+        mensagem = message.content
+        user_id = message.author.id
+        channel_id = message.channel.id
+        ConfereUserId(user_id, channel_id)
+        removed_channel_id = ReconhecerComando(mensagem, ",removechannelid ")
+        RemoveChannelIdWhitelist(channel_id, removed_channel_id)
+        Envia_Msg(channel_id, "Canal removido com sucesso")
+
+    if message.content.find(".addchannelid") != -1:
+        await message.channel.send("Comando recebido")
+        mensagem = message.content
+        user_id = message.author.id
+        channel_id = message.channel.id
+        ConfereUserId(user_id, channel_id)
+        added_channel_id = ReconhecerComando(mensagem, ",addchannelid ")
+        AddChannelIdWhitelist(channel_id, added_channel_id)
+        Envia_Msg(channel_id, "Canal adicionado com sucesso")
+
     if message.content.find(".teste") != -1:
-        print("comando recebido")
-        id = message.channel.id
-        response = ConfereDiscId(id)
-        if not response: raise ValueError("Server fora da Whitelist")
-        print(response)
+        await message.channel.send(".addthischannel")
 
 #Funções
-
-def Refatorando(channelId, mensagem ):
-    response = ConfereDiscId(channelId)
-    RaiseChannelError(channelId, response)
-    retorno = ReconheceJogo(channelId, mensagem)
+def RefatorandoCmdMods(channel_id, mensagem ):
+    ConfereDiscId(channel_id)
+    retorno = ReconheceJogo(channel_id, mensagem)
     game = retorno[0]
     comando = retorno[1]
     match_id = ReconhecerComando(mensagem, comando)
@@ -174,23 +211,84 @@ def PegarStats(match_id, game):
                 log.write('\n' + str(dict) + ' - ' + str(lista[dict]))
     log.close()
 
-def ConfereDiscId(channel_id):
+def ConfereUserId(user_id, channel_id):
     whitelist = []
-    with open ("server_whitelist.txt", "r+") as whitelist_doc:
+    with open("user_id_whitelist.txt", "r") as whitelist_doc:
         for linha in whitelist_doc.readlines():
             nova_linha = linha.replace("\n", "")
             whitelist.append(nova_linha)
         whitelist_doc.close()
     for channel in whitelist:
+        if channel == str(user_id):
+            response = True
+            break
+        else:
+            response = False
+    RaiseUserError(channel_id, response)
+
+def ConfereDiscId(channel_id):
+    DiscIdWhitelist = []
+    with open ("channel_whitelist.txt", "r+") as whitelist_doc:
+        for linha in whitelist_doc.readlines():
+            nova_linha = linha.replace("\n", "")
+            DiscIdWhitelist.append(nova_linha)
+        whitelist_doc.close()
+    for channel in DiscIdWhitelist:
         if channel == str(channel_id):
             response = True
             break
         else: response = False
-    return response
+    RaiseChannelError(channel_id, response)
+
+def AddChannelIdWhitelist(channel_id, added_channelid):
+    DiscIdWhitelist = []
+    with open("channel_whitelist.txt", "r") as whitelist_doc:
+        for linha in whitelist_doc.readlines():
+            nova_linha = linha.replace("\n", "")
+            DiscIdWhitelist.append(nova_linha)
+        whitelist_doc.close()
+    for channel in DiscIdWhitelist:
+        if channel == str(added_channelid):
+            response = True
+            break
+        else: response = False
+    if response:
+        Envia_Msg(channel_id, "Canal já presente na Whitelist")
+        raise ValueError("Canal já presente na Whitelist")
+    with open("channel_whitelist.txt", "a") as whitelist_doc:
+        whitelist_doc.write(str(added_channelid) + "\n")
+
+def RemoveChannelIdWhitelist(channel_id, removed_channe_id):
+    index = 0
+    with open("channel_whitelist.txt", "r") as whitelist_doc:
+        new_whitelist = whitelist_doc.readlines()
+        whitelist_doc.close()
+    for linha in new_whitelist:
+        if linha.strip("\n") == str(removed_channe_id):
+            del new_whitelist[index]
+            response = True
+            break
+        else:
+            index += 1
+            response = False
+    if not response:
+        mensagem = "Canal não está na Whitelist"
+        Envia_Msg(channel_id, mensagem)
+        raise ValueError("Canal não encontrado na Whitelist")
+    with open ("channel_whitelist.txt", "w") as whitelist_doc:
+        for linha in new_whitelist:
+            whitelist_doc.write(linha)
+    whitelist_doc.close()
+
+def RaiseUserError(channel_id, response):
+    mensagem = "Você não tem permissão para usar esse comando"
+    if not response:
+        Envia_Msg(channel_id, mensagem)
+        raise ValueError("Usuário sem permissão")
 
 def RaiseChannelError(channelId, response):
     mensagem = "Não é permitido enviar comandos nesse canal"
-    if response == False:
+    if not response:
         Envia_Msg(channelId, mensagem)
         raise ValueError("Canal fora da Whitelist")
 
@@ -198,8 +296,20 @@ def Envia_Msg(channelId, mensagem):
     channel = client.get_channel(channelId)
     client.loop.create_task(channel.send(mensagem))
 
-def Envia_Arquivo(channel_id, arquvio):
+def Envia_Arquivo(channel_id, arquvio): #Em desenvolvimento
     pass
+
+
+
+'''match_inf = paladins_req.getMatch(1086507338)
+#print(CustomEncoder().encode(match_inf))
+match_infJSONData = json.dumps(match_inf, indent=4, cls=CustomEncoder)
+print(type(match_infJSONData))
+match_infJSON = json.loads(match_infJSONData)
+print(match_infJSON)
+print(type(match_infJSON))
+with open("StatsJson.txt", "w") as jsonFile:
+    json.dump(match_infJSON, jsonFile)'''
 
 #Código para executar o Bot com as configurações pré-definidas
 client.run(token)
