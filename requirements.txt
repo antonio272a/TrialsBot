@@ -4,4 +4,3 @@ pandas
 pyrez
 pillow
 urlopen
-io
