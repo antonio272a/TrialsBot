@@ -3,11 +3,7 @@ import pyrez
 import asyncio
 import json
 from json import JSONEncoder
-
-
-class CustomEncoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
+from imgcreation import CreatePaladinsStatsImg
 
 #Código para resgatar o token do Bot
 def read_token():
@@ -43,7 +39,19 @@ async def on_message(message):
         embed.add_field(name=".stats", value="Retorna o arquivo de texto com todos os stats da partida")
         embed.add_field(name=".id", value="Retorna os Id's de todos os jogadores, com exceção dos perfil privados")
         embed.add_field(name=".replay", value="Renorna os players da partida pra conferência, junto com a informação de caso a partida tenha Replay ou não")
+        embed.add_field(name=".image (Pré-alpha)", value="Retorna a imagem dos stats da partida")
         await message.channel.send(content=None, embed=embed)
+
+    if message.content.find(".image") != -1:
+        await message.channel.send(content="Comando recebido", embed=None)
+        mensagem = message.content
+        channelId = message.channel.id
+        retorno = RefatorandoCmdMods(channelId, mensagem)
+        match_id = retorno[1]
+        CriaPaladinsImagemStats(match_id)
+        with open("./createdimages/Teste.png", 'rb') as file:
+            await message.channel.send(file=discord.File(file, "Image.png"))
+        file.close()
 
     if message.content.find(".stats") != -1: #Retorna stats.txt no discord
         await message.channel.send(content="Comando recebido", embed=None)
@@ -55,6 +63,7 @@ async def on_message(message):
         PegarStats(match_id, game)
         with open("teste.txt", 'rb') as file:
             await message.channel.send(file=discord.File(file, "Stats.txt"))
+        file.close()
 
     if message.content.find(".id") != -1: #Retorna resultado da partida e ID dos players
         await message.channel.send(content="Comando recebido", embed=None)
@@ -98,7 +107,7 @@ async def on_message(message):
         user_id = message.author.id
         channel_id = message.channel.id
         ConfereUserId(user_id, channel_id)
-        removed_channel_id = ReconhecerComando(mensagem, ".removechannelid ")
+        removed_channel_id = ReconhecerComando(mensagem, ",removechannelid ")
         RemoveChannelIdWhitelist(channel_id, removed_channel_id)
         Envia_Msg(channel_id, "Canal removido com sucesso")
 
@@ -108,7 +117,7 @@ async def on_message(message):
         user_id = message.author.id
         channel_id = message.channel.id
         ConfereUserId(user_id, channel_id)
-        added_channel_id = ReconhecerComando(mensagem, ".addchannelid ")
+        added_channel_id = ReconhecerComando(mensagem, ",addchannelid ")
         AddChannelIdWhitelist(channel_id, added_channel_id)
         Envia_Msg(channel_id, "Canal adicionado com sucesso")
 
@@ -116,7 +125,7 @@ async def on_message(message):
         await message.channel.send(".addthischannel")
 
 #Funções
-def RefatorandoCmdMods(channel_id, mensagem ):
+def RefatorandoCmdMods(channel_id, mensagem):
     ConfereDiscId(channel_id)
     retorno = ReconheceJogo(channel_id, mensagem)
     game = retorno[0]
@@ -131,7 +140,7 @@ def ReconhecerComando(mensagem, content):
     return output_comando
 
 def ReconheceJogo (channel_id, mensagem):
-    comandos = [".id", ".stats", ".replay"]
+    comandos = [".id", ".stats", ".replay", ".image"]
     jogos = {"smite": smite_req, "paladins": paladins_req}
     for jogo in jogos:
         if mensagem.find(jogo) != -1:
@@ -146,8 +155,8 @@ def ReconheceJogo (channel_id, mensagem):
             str_comando = command
             comando = str_comando + "-" + str_jogo + " "
             break
-    retorno = [game, comando]
     mensagem = "Comando incorreto, o comando sempre deve ser acompanhado pelo jogo, detalhes em .help"
+    retorno = [game, comando]
     if game == "Error":
         Envia_Msg(channel_id, mensagem)
         raise LookupError("Comando não acompanhado pelo jogo")
@@ -156,50 +165,47 @@ def ReconheceJogo (channel_id, mensagem):
 
 def PegarId(match_id, game):
     match_inf = game.getMatch(match_id)
-    with open("ids.txt", "w") as ids:
-        details_players = ""
-        index = 0
-        for details in match_inf:
-            if details["playerName"] == "":
-                playerName = "Privado"
-            else:
-                playerName = details["playerName"]
-            if details["playerId"] == "0":
-                playerId = "Privado"
-            else:
-                playerId = details["playerId"]
-            details_players += "\n" + details["Win_Status"] + " - " + "Nick: " + playerName + " - " + "Campeão: " + \
-                               details["Reference_Name"] + " - " + \
-                               "id: " + playerId
-            index += 1
-            if index == 5: details_players += "\n" + "\n" + "--------------------" + "\n"
-        return details_players
+    details_players = ""
+    index = 0
+    for details in match_inf:
+        if details["playerName"] == "":
+            playerName = "Privado"
+        else:
+            playerName = details["playerName"]
+        if details["playerId"] == "0":
+            playerId = "Privado"
+        else:
+            playerId = details["playerId"]
+        details_players += "\n" + details["Win_Status"] + " - " + "Nick: " + playerName + " - " + "Campeão: " + \
+                            details["Reference_Name"] + " - " + \
+                            "id: " + playerId
+        index += 1
+        if index == 5: details_players += "\n" + "\n" + "--------------------" + "\n"
+    return details_players
 
 def PegarReplay(match_id, game):
     match_inf = game.getMatch(match_id)
-    with open("ids.txt", "w") as ids:
-        details_players = ""
-        index = 0
-
-        for details in match_inf:
-            if details["playerName"] == "":
-                playerName = "Privado"
-            else:
-                playerName = details["playerName"]
-            if details["playerId"] == "0":
-                playerId = "Privado"
-            else:
-                playerId = details["playerId"]
-            details_players += "\n" + details["Win_Status"] + " - " + "Nick: " + playerName
-            index += 1
-            if index == 5: details_players += "\n" + "\n" + "--------------------" + "\n"
-        for details in match_inf:
-            if details["hasReplay"] == "y":
-                stats_replay = "Possui Replay"
-                break
-            else:
-                stats_replay = "Não possui Replay"
-        details_players += "\n" + stats_replay
+    details_players = ""
+    index = 0
+    for details in match_inf:
+        if details["playerName"] == "":
+            playerName = "Privado"
+        else:
+            playerName = details["playerName"]
+        if details["playerId"] == "0":
+            playerId = "Privado"
+        else:
+            playerId = details["playerId"]
+        details_players += "\n" + details["Win_Status"] + " - " + "Nick: " + playerName
+        index += 1
+        if index == 5: details_players += "\n" + "\n" + "--------------------" + "\n"
+    for details in match_inf:
+        if details["hasReplay"] == "y":
+            stats_replay = "Possui Replay"
+            break
+        else:
+            stats_replay = "Não possui Replay"
+    details_players += "\n" + stats_replay
     return details_players
 
 def PegarStats(match_id, game):
@@ -213,7 +219,7 @@ def PegarStats(match_id, game):
 
 def ConfereUserId(user_id, channel_id):
     whitelist = []
-    with open("user_id_whitelist.txt", "r") as whitelist_doc:
+    with open("./whitelists/user_id_whitelist.txt", "r") as whitelist_doc:
         for linha in whitelist_doc.readlines():
             nova_linha = linha.replace("\n", "")
             whitelist.append(nova_linha)
@@ -228,7 +234,7 @@ def ConfereUserId(user_id, channel_id):
 
 def ConfereDiscId(channel_id):
     DiscIdWhitelist = []
-    with open ("channel_whitelist.txt", "r+") as whitelist_doc:
+    with open("./whitelists/channel_whitelist.txt", "r+") as whitelist_doc:
         for linha in whitelist_doc.readlines():
             nova_linha = linha.replace("\n", "")
             DiscIdWhitelist.append(nova_linha)
@@ -242,7 +248,7 @@ def ConfereDiscId(channel_id):
 
 def AddChannelIdWhitelist(channel_id, added_channelid):
     DiscIdWhitelist = []
-    with open("channel_whitelist.txt", "r") as whitelist_doc:
+    with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
         for linha in whitelist_doc.readlines():
             nova_linha = linha.replace("\n", "")
             DiscIdWhitelist.append(nova_linha)
@@ -255,12 +261,12 @@ def AddChannelIdWhitelist(channel_id, added_channelid):
     if response:
         Envia_Msg(channel_id, "Canal já presente na Whitelist")
         raise ValueError("Canal já presente na Whitelist")
-    with open("channel_whitelist.txt", "a") as whitelist_doc:
+    with open("./whitelists/channel_whitelist.txt", "a") as whitelist_doc:
         whitelist_doc.write(str(added_channelid) + "\n")
 
 def RemoveChannelIdWhitelist(channel_id, removed_channe_id):
     index = 0
-    with open("channel_whitelist.txt", "r") as whitelist_doc:
+    with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
         new_whitelist = whitelist_doc.readlines()
         whitelist_doc.close()
     for linha in new_whitelist:
@@ -275,7 +281,7 @@ def RemoveChannelIdWhitelist(channel_id, removed_channe_id):
         mensagem = "Canal não está na Whitelist"
         Envia_Msg(channel_id, mensagem)
         raise ValueError("Canal não encontrado na Whitelist")
-    with open ("channel_whitelist.txt", "w") as whitelist_doc:
+    with open ("./whitelists/channel_whitelist.txt", "w") as whitelist_doc:
         for linha in new_whitelist:
             whitelist_doc.write(linha)
     whitelist_doc.close()
@@ -299,17 +305,18 @@ def Envia_Msg(channelId, mensagem):
 def Envia_Arquivo(channel_id, arquvio): #Em desenvolvimento
     pass
 
-
-
-'''match_inf = paladins_req.getMatch(1086507338)
-#print(CustomEncoder().encode(match_inf))
-match_infJSONData = json.dumps(match_inf, indent=4, cls=CustomEncoder)
-print(type(match_infJSONData))
-match_infJSON = json.loads(match_infJSONData)
-print(match_infJSON)
-print(type(match_infJSON))
-with open("StatsJson.txt", "w") as jsonFile:
-    json.dump(match_infJSON, jsonFile)'''
+def CriaPaladinsImagemStats(match_id):
+    champions = paladins_req.getChampions()
+    itens = paladins_req.getItems()
+    iconsId_list = []
+    stats_list = []
+    match_inf = paladins_req.getMatch(match_id)
+    stats_reference = ["playerName", "Kills_Player", "Deaths", "Assists", "Gold_Earned", "Damage_Player", "Healing"]
+    for player in match_inf:
+        iconsId_list.append(player["ChampionId"])
+        for stat in stats_reference:
+            stats_list.append(player[stat])
+    CreatePaladinsStatsImg(iconsId_list, stats_list, champions, itens)
 
 #Código para executar o Bot com as configurações pré-definidas
 client.run(token)
