@@ -2,5 +2,8 @@ discord.py
 PyNaCl==1.3.0
 pandas
 pyrez
-pillow
+json
+PIL
+urllib
 urlopen
+io
