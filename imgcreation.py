@@ -63,14 +63,14 @@ def StatsPaste(stats_list, bkg):
     collum_count = 0
     length = [0, 192, 258, 327, 420, 511, 647]
     count = 7
-    start_box = [223,180]
+    start_box = [223, 180]
     font = ImageFont.truetype("./fonts/Arial.ttf", 16)
     draw = ImageDraw.Draw(bkg)
     for stat in stats_list:
         if collum_count == count:
             collum_count = 0
             line_count += 1
-        box = [start_box[0] + length[collum_count],start_box[1] + 48*line_count]
+        box = [start_box[0] + length[collum_count], start_box[1] + 48*line_count]
         draw.text(box, str(stat), (255, 255, 255), font)
         collum_count += 1
 
