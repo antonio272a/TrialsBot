@@ -4,6 +4,7 @@ import asyncio
 import json
 from json import JSONEncoder
 from imgcreation import create_paladins_stats_img
+from iterator import DocIterator
 
 
 # Código para resgatar o token do Bot
@@ -24,7 +25,6 @@ smite_req = pyrez.SmiteAPI(devId=devId_Hirez, authKey=authKey_Hirez)
 
 # Subindo o Bot no discord
 client = discord.Client()
-
 
 # Código quando é enviado uma mensagem ao Bot
 @client.event
@@ -130,7 +130,7 @@ async def on_message(message):  # Ao receber mensagem
         envia_msg(channel_id, "Canal adicionado com sucesso")  # Envia mensagem no canal remetente do discord
 
     if message.content.find(".teste") != -1:  # Testa se o Id de usuário está sendo conferido
-        await message.channel.send(".addthischannel")
+        await message.channel.send(content=".removethischannel")
 
 
 # Funções
@@ -182,11 +182,9 @@ def pegar_id(match_id, game):
     for details in match_inf:  # Confere se a conta do player é privada, nome retorna vazio
         if details["playerName"] == "":
             player_name = "Privado"  # Troca nome vazio
-        else:
-            player_name = details["playerName"]
-        if details["playerId"] == "0":  # Confere se a conta é privada, Id retorna 0
             player_id = "Privado"  # Troca Id 0
         else:
+            player_name = details["playerName"]
             player_id = details["playerId"]
         details_players += "\n" + details["Win_Status"] + " - " + "Nick: " + player_name + " - " + "Campeão: " + \
                            details["Reference_Name"] + " - " + "id: " + player_id  # Adiciona stats na mensagem
@@ -223,88 +221,57 @@ def pegar_replay(match_id, game):
 def pegar_stats(match_id, game):
     match_inf = game.getMatch(match_id)  # instancia informações da partida
     with open("Stats.txt", 'w', encoding="UTF-8") as log:
-        for lista in match_inf:  # Pra cada player dentro das infos
+        for player in match_inf:  # Pra cada player dentro das infos
             log.write('\n' + '\n' + '************************************' + '\n')  # Separa os players
-            for dictio in lista:  # Pra cada info dentro dos players
-                log.write('\n' + str(dictio) + ' - ' + str(lista[dictio]))  # escreve info no doc
+            for stat in player:  # Pra cada info dentro dos players
+                log.write('\n' + str(stat) + ' - ' + str(player[stat]))  # escreve info no doc
     log.close()
 
 
-def confere_user_id(user_id, channel_id):
-    whitelist = []
-    with open("./whitelists/user_id_whitelist.txt", "r") as whitelist_doc:
-        for linha in whitelist_doc.readlines():  # Percorre as linhas do doc de Whitelist
-            nova_linha = linha.replace("\n", "")  # Trata a linha do doc
-            whitelist.append(nova_linha)  # Adiciona a linha do doc na lista
-        whitelist_doc.close()
-    for channel in whitelist:  # Pra cada User presente no doc
-        if channel == str(user_id):  # Confere se o Id do Usuario está na Whitelist
-            response = True  # Se tiver, retorna True
+def confere_id(arquivo, used_id):
+    response = False
+    for loop in DocIterator(arquivo, used_id):  # Percorre os Id's
+        if loop:  # Se retornar True (id presente no doc)
+            response = True
             break
-        else:
-            response = False  # Se não tiver, retorna False
+    return response
+
+
+def confere_user_id(user_id, channel_id):
+    response = confere_id("./whitelists/user_id_whitelist.txt", user_id)
     raise_user_error(channel_id, response)  # Caso seja False, essa função sobe um erro
 
 
 def confere_disc_id(channel_id):
-    disc_id_whitelist = []
-    with open("./whitelists/channel_whitelist.txt", "r+") as whitelist_doc:
-        for linha in whitelist_doc.readlines():  # Percorre as linhas do doc de Whitelist
-            nova_linha = linha.replace("\n", "")  # Trata a linha do doc
-            disc_id_whitelist.append(nova_linha)  # Adiciona a linha do doc na lista
-        whitelist_doc.close()
-    for channel in disc_id_whitelist:  # Pra cada Canal presente no doc
-        if channel == str(channel_id):  # Confere se o Id do canal está na Whitelist
-            response = True  # Se tiver, retorna True
-            break
-        else:
-            response = False  # Se não tiver, retorna False
+    response = confere_id("./whitelists/channel_whitelist.txt", channel_id)
     raise_channel_error(channel_id, response)  # Caso seja False, essa função sobe um erro
 
 
 def add_channel_id_whitelist(channel_id, added_channel_id):
-    disc_id_whitelist = []
-    # Até o comentário seguinte, o código só confere se o Id já está presente na lista para maiores detalhes confira
-    # os comandos ConfereDiscID ou ConfereUserId
-    with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
-        for linha in whitelist_doc.readlines():
-            nova_linha = linha.replace("\n", "")
-            disc_id_whitelist.append(nova_linha)
-        whitelist_doc.close()
-    for channel in disc_id_whitelist:
-        if channel == str(added_channel_id):
-            response = True
-            break
-        else:
-            response = False
-    if response:  # Se retornar True (Canal já presente na whitelist)
+    canal_presente = confere_id("./whitelists/channel_whitelist.txt", added_channel_id)
+    if canal_presente:
         envia_msg(channel_id, "Canal já presente na Whitelist")  # Avisa o usuário
         raise ValueError("Canal já presente na Whitelist")  # Levanta erro para evitar a duplicação de Id's
-    with open("./whitelists/channel_whitelist.txt", "a") as whitelist_doc:
-        whitelist_doc.write(str(added_channelid) + "\n")  # Caso contrário, adiciona o Id
+    else:
+        with open("./whitelists/channel_whitelist.txt", "a") as whitelist_doc:
+            whitelist_doc.write(str(added_channel_id) + "\n")  # Caso contrário, adiciona o Id
+        whitelist_doc.close()
 
 
 def remove_channel_id_whitelist(channel_id, removed_channel_id):
-    index = 0  # Index para saber qual linha excluir
-    with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
-        new_whitelist = whitelist_doc.readlines()  # cria lista com todas as linhas do doc
-        whitelist_doc.close()
-    for linha in new_whitelist:  # pra cada linha(Id) na lista nova
-        if linha.strip("\n") == str(removed_channel_id):  # se a linha for igual ao Id a ser removido
-            del new_whitelist[index]  # Deleta o Id da lista
-            response = True
-            break
-        else:
-            index += 1
-            response = False
-    if not response:  # Caso o canal não esteja na Whitelist
-        mensagem = "Canal não está na Whitelist"
-        envia_msg(channel_id, mensagem)  # avisa o usuário
-        raise ValueError("Canal não encontrado na Whitelist")  # Levanta erro
-    with open("./whitelists/channel_whitelist.txt", "w") as whitelist_doc:
-        for linha in new_whitelist:  # Caso contrário, ele escreve por cima do Doc antigo com a lista sem o Id removido.
-            whitelist_doc.write(linha)
-    whitelist_doc.close()
+    canal_presente = confere_id("./whitelists/channel_whitelist.txt", removed_channel_id)  # Confere canais na lista
+    print(canal_presente)
+    if not canal_presente:
+        envia_msg(channel_id, "Canal não presente na Whitelist")
+        raise ValueError("Canal não presente na Whitelist")
+    else:
+        with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
+            lines = whitelist_doc.readlines()
+            whitelist_doc.close()
+        with open("./whitelists/channel_whitelist.txt", "w") as whitelist_doc:
+            for line in lines:
+                if line.strip("\n") != str(removed_channel_id):
+                    whitelist_doc.write(line)
 
 
 def raise_user_error(channel_id, response):
