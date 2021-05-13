@@ -23,14 +23,27 @@ authKey_Hirez = "310114B6E36447369BBD3F35034995AC"
 paladins_req = pyrez.PaladinsAPI(devId=devId_Hirez, authKey=authKey_Hirez)
 smite_req = pyrez.SmiteAPI(devId=devId_Hirez, authKey=authKey_Hirez)
 
+# Código para gerar uma nova sessão da API
+session_id_paladins = paladins_req._createSession()
+session_id_smite = smite_req._createSession()
+
+champions = paladins_req.getChampions()  # Instancia lista de campeões
+itens = paladins_req.getItems()  # Instancia lista de itens
+
 # Subindo o Bot no discord
 client = discord.Client()
+
+# Variáveis globais para print de imagem
+winner_team = "[VKS]"
+loser_team = "[GL]"
+
 
 # Código quando é enviado uma mensagem ao Bot
 @client.event
 # Comandos
 async def on_ready():
     await client.change_presence(activity=discord.Game(name=".help"))
+    print("Iniciado")
 
 
 @client.event
@@ -129,6 +142,26 @@ async def on_message(message):  # Ao receber mensagem
         add_channel_id_whitelist(channel_id, added_channel_id)  # adiciona o canal à whitelist
         envia_msg(channel_id, "Canal adicionado com sucesso")  # Envia mensagem no canal remetente do discord
 
+    if message.content.find(".winner") != -1:
+        await message.channel.send(content="Comando recebido", embed=None)  # Colocado sem função por agilidade no envio
+        mensagem = message.content
+        channel_id = message.channel.id
+        retorno = refatorando_cmd_mods(channel_id, mensagem)  # Função para simplificar o código
+        time = "[" + retorno[1] + "]"
+        global winner_team
+        winner_team = time
+        await message.channel.send(content="Time vencedor definido")
+
+    if message.content.find(".loser") != -1:
+        await message.channel.send(content="Comando recebido", embed=None)  # Colocado sem função por agilidade no envio
+        mensagem = message.content
+        channel_id = message.channel.id
+        retorno = refatorando_cmd_mods(channel_id, mensagem)  # Função para simplificar o código
+        time = "[" + retorno[1] + "]"
+        global loser_team
+        loser_team = time
+        await message.channel.send(content="Time perdedor definido")
+
     if message.content.find(".teste") != -1:  # Testa se o Id de usuário está sendo conferido
         await message.channel.send(content=".removethischannel")
 
@@ -151,7 +184,7 @@ def reconhecer_comando(mensagem, content):
 
 
 def reconhece_jogo(channel_id, mensagem):
-    comandos = [".id", ".stats", ".replay", ".image"]
+    comandos = [".id", ".stats", ".replay", ".image", ".winner", ".loser"]
     jogos = {"smite": smite_req, "paladins": paladins_req}
     for jogo in jogos:  # Percorre a lista de jogos instanciados acima
         if mensagem.find(jogo) != -1:  # Se achar o jogo dentro da mensagem
@@ -248,7 +281,7 @@ def confere_disc_id(channel_id):
 
 
 def add_channel_id_whitelist(channel_id, added_channel_id):
-    canal_presente = confere_id("./whitelists/channel_whitelist.txt", added_channel_id)
+    canal_presente = confere_id("./whitelists/channel_whitelist.txt", added_channel_id)  # Confere canais na lista
     if canal_presente:
         envia_msg(channel_id, "Canal já presente na Whitelist")  # Avisa o usuário
         raise ValueError("Canal já presente na Whitelist")  # Levanta erro para evitar a duplicação de Id's
@@ -260,18 +293,18 @@ def add_channel_id_whitelist(channel_id, added_channel_id):
 
 def remove_channel_id_whitelist(channel_id, removed_channel_id):
     canal_presente = confere_id("./whitelists/channel_whitelist.txt", removed_channel_id)  # Confere canais na lista
-    print(canal_presente)
-    if not canal_presente:
+    if not canal_presente:  # Se o canal não estiver na whitelist
         envia_msg(channel_id, "Canal não presente na Whitelist")
         raise ValueError("Canal não presente na Whitelist")
     else:
         with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
-            lines = whitelist_doc.readlines()
+            lines = whitelist_doc.readlines()  # retorna todos os Id's
             whitelist_doc.close()
         with open("./whitelists/channel_whitelist.txt", "w") as whitelist_doc:
             for line in lines:
-                if line.strip("\n") != str(removed_channel_id):
+                if line.strip("\n") != str(removed_channel_id):  # Se a linha for igual à removida, não escreve
                     whitelist_doc.write(line)
+        whitelist_doc.close()
 
 
 def raise_user_error(channel_id, response):
@@ -301,19 +334,36 @@ def envia_arquivo():  # Em desenvolvimento
 
 
 def cria_paladins_imagem_stats(match_id):
-    champions = paladins_req.getChampions()  # Instancia lista de campeões
-    itens = paladins_req.getItems()  # Instancia lista de itens
+    global champions
+    global itens
+    global winner_team
+    global loser_team
+    teams_list = [winner_team, loser_team]
     icons_id_list = []
     stats_list = []
     match_inf = paladins_req.getMatch(match_id)  # Instancia os stats da partida
-    stats_reference = ["playerName", "Kills_Player", "Deaths", "Assists", "Gold_Earned", "Damage_Player", "Healing"]
+    stats_reference_1 = ["playerName", "Gold_Earned"]
+    stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
+    stats_reference_3 = ["Killing_Spree", "Objective_Assists", "Damage_Player", "Damage_Mitigated", "Healing"]
+
     # Acima é a lista dos stats que serão passados para colagem
     for player in match_inf:  # Pra cada jogador, adiciona Id de champ na lista
+        kda_stat = ""
+        index = 0
         icons_id_list.append(player["ChampionId"])
-        for stat in stats_reference:  # Pra cada stat na referência, adiciona o stat na lista
-            stats_list.append(player[stat])
-    create_paladins_stats_img(icons_id_list, stats_list, champions,
-                              itens)  # Passa as infos pra outro arquivo montar a imagem
+        for stat_1 in stats_reference_1:  # Pra cada stat na referência, adiciona o stat na lista
+            stats_list.append(player[stat_1])
+        for stat_2 in stats_reference_2:
+            if index != 1:
+                kda_stat += str(player[stat_2])
+            else:
+                kda_stat += "/" + str(player[stat_2]) + "/"
+            index += 1
+        stats_list.append(kda_stat)
+        for stat_3 in stats_reference_3:
+            stats_list.append(player[stat_3])
+    # Passa as infos pra outro arquivo montar a imagem
+    create_paladins_stats_img(icons_id_list, stats_list, teams_list, champions, itens)
 
 
 # Código para executar o Bot com as configurações pré-definidas

@@ -9,7 +9,8 @@ def forma_img(url):
     req = urllib.request.Request(url, None, header)
     url = urllib.request.urlopen(req, timeout=100)
     imgbytes = io.BytesIO(url.read())
-    img = Image.open(imgbytes)
+    full_img = Image.open(imgbytes)
+    img = full_img.crop((0, 140, 512, 396))
     return img
 
 
@@ -38,14 +39,14 @@ def itens_paste(stat_id_list, bkg, champions, itens):
     length = 40
     line_count = 0
     count = 10
-    size = (32, 32)
+    size = (48, 24)
     for stat_id in stat_id_list:
         if collum_count == count:
             collum_count = 0
             line_count += 1
         new_box = [box[0] + length * collum_count, box[1] + 48 * line_count]
         try:
-            stat_img = PegaStatImg(stat_id, champions, itens)
+            stat_img = pega_stat_img(stat_id, champions, itens)
             stat_img = stat_img.resize(size)
             bkg.paste(stat_img, new_box)
         except:
@@ -54,38 +55,63 @@ def itens_paste(stat_id_list, bkg, champions, itens):
 
 
 def icons_paste(icon_id_list, bkg, champions, itens):
-    box = [144, 172]
+    box = [40, 100]
     line_count = 0
-    size = (32, 32)
+    size = (96, 48)
+    height = 60
     for icon_id in icon_id_list:
-        new_box = [box[0], box[1] + 48 * line_count]
-        icon_img = PegaStatImg(icon_id, champions, itens)
+        if line_count == 5:
+            box[1] += 12
+        new_box = [box[0], box[1] + height * line_count]
+        icon_img = pega_stat_img(icon_id, champions, itens)
         icon_img = icon_img.resize(size)
         bkg.paste(icon_img, new_box)
+        line_count += 1
+
+
+def teams_paste(teams_list, bkg):
+    start_box = [176, 116]
+    line_count = 0
+    index = 0
+    font = ImageFont.truetype("./fonts/Arial.ttf", 16)
+    draw = ImageDraw.Draw(bkg)
+    while index < 10:
+        if index < 5:
+            team = teams_list[0]
+        else:
+            team = teams_list[1]
+        if index == 5:
+            start_box[1] += 12
+        index += 1
+        box = [start_box[0], start_box[1] + 60 * line_count]
+        draw.text(box, str(team), (255, 255, 255), font)
         line_count += 1
 
 
 def stats_paste(stats_list, bkg):
     line_count = 0
     collum_count = 0
-    length = [0, 192, 258, 327, 420, 511, 647]
-    count = 7
-    start_box = [223, 180]
+    length = [0, 276, 392, 528, 588, 692, 812, 932]
+    count = 8
+    start_box = [260, 116]
     font = ImageFont.truetype("./fonts/Arial.ttf", 16)
     draw = ImageDraw.Draw(bkg)
     for stat in stats_list:
+        if line_count == 4 and collum_count == 8:
+            start_box[1] += 12
         if collum_count == count:
             collum_count = 0
             line_count += 1
-        box = [start_box[0] + length[collum_count], start_box[1] + 48 * line_count]
+        box = [start_box[0] + length[collum_count], start_box[1] + 60 * line_count]
         draw.text(box, str(stat), (255, 255, 255), font)
         collum_count += 1
 
 
-def create_paladins_stats_img(icons_id_list, stats_list, champions, itens):
+def create_paladins_stats_img(icons_id_list, stats_list, teams_list, champions, itens):
     bkg = Image.open("./images/bkg.png")
-    IconsPaste(icons_id_list, bkg, champions, itens)
-    StatsPaste(stats_list, bkg)
+    icons_paste(icons_id_list, bkg, champions, itens)
+    teams_paste(teams_list, bkg)
+    stats_paste(stats_list, bkg)
     bkg.save("./createdimages/Teste.png")
 
 # lista_stats = [] stats_reference = ["playerName", "Kills_Player", "Deaths", "Assists", "Gold_Earned",
