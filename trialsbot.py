@@ -74,10 +74,10 @@ async def on_message(message):  # Ao receber mensagem
         match_id = retorno[1]
         game = retorno[0]
         if game == paladins_req:
-            cria_paladins_imagem_stats(match_id)  # Cria as imagens e salva
+            cria_imagem(match_id, game)  # Cria as imagens e salva
             imagem = "Teste-paladins.png"
-        else:
-            cria_smite_imagem_stats(match_id)
+        elif game == smite_req:
+            cria_imagem(match_id, game) # Cria as imagens e salva
             imagem = "Teste-smite.png"
         with open("./createdimages/" + imagem, 'rb') as file:  # Envia arquivo no discord
             await message.channel.send(file=discord.File(file, "Image.png"))
@@ -105,14 +105,14 @@ async def on_message(message):  # Ao receber mensagem
         details_players = pegar_id(match_id, game)  # Retorna a mensagem já formulada para envio
         envia_msg(channel_id, details_players)  # Envia mensagem no canal remetente do discord
 
-    if message.content.find(".playerid") != -1:
+    if message.content.find(".playerid") != -1: #Retorna o ID do nick passado
         await message.channel.send(content="Comando recebido", embed=None)  # Colocado sem função por agilidade no envio
         mensagem = message.content
         channel_id = message.channel.id
         retorno = refatorando_cmd_mods(channel_id, mensagem)  # Função para simplificar o código
         game = retorno[0]
         player_name = retorno[1]
-        player_id = game.getPlayerId(player_name)[0]["player_id"]
+        player_id = game.getPlayerId(player_name)[0]["player_id"] #retorna já o ID da conta, sendo privada ou não
         player_info = "Nick: " + player_name + " - id: " + str(player_id)
         envia_msg(channel_id, player_info)  # Envia mensagem no canal remetente do discord
 
@@ -163,7 +163,7 @@ async def on_message(message):  # Ao receber mensagem
         add_channel_id_whitelist(channel_id, added_channel_id)  # adiciona o canal à whitelist
         envia_msg(channel_id, "Canal adicionado com sucesso")  # Envia mensagem no canal remetente do discord
 
-    if message.content.find(".winner") != -1:
+    if message.content.find(".winner") != -1: #Define o time vencedor (Variável global)
         await message.channel.send(content="Comando recebido", embed=None)  # Colocado sem função por agilidade no envio
         mensagem = message.content
         channel_id = message.channel.id
@@ -173,7 +173,7 @@ async def on_message(message):  # Ao receber mensagem
         winner_team = time
         await message.channel.send(content="Time vencedor definido")
 
-    if message.content.find(".loser") != -1:
+    if message.content.find(".loser") != -1: #Define o time perdedor (Variável global)
         await message.channel.send(content="Comando recebido", embed=None)  # Colocado sem função por agilidade no envio
         mensagem = message.content
         channel_id = message.channel.id
@@ -187,7 +187,14 @@ async def on_message(message):  # Ao receber mensagem
         await message.channel.send(content=".removethischannel")
 
 
-# Funções
+"""
+Funções para sequencia de funções/comandos repetidos:
+
+1 - refatorando_cmd_mods
+2 - reconhecer_comando
+3 - reconhece_jogo
+"""
+
 def refatorando_cmd_mods(channel_id, mensagem):
     confere_disc_id(channel_id)  # Confere o Id do canal
     retorno = reconhece_jogo(channel_id, mensagem)  # Retorna a requisição e a str do comando sem o match_id
@@ -228,6 +235,112 @@ def reconhece_jogo(channel_id, mensagem):
 
     return retorno
 
+
+"""
+Comandos para conferência de permissões:
+
+1 - confere_id
+2 - confere_user_id
+3 - confere_disc_id
+4 - raise_user_error
+5 - raise_channel_error
+"""
+
+def confere_id(arquivo, used_id):
+    response = False
+    for loop in DocIterator(arquivo, used_id):  # Percorre os Id's
+        if loop:  # Se retornar True (id presente no doc)
+            response = True
+            break
+    return response
+
+
+def confere_user_id(user_id, channel_id):
+    response = confere_id("./whitelists/user_id_whitelist.txt", user_id)
+    raise_user_error(channel_id, response)  # Caso seja False, essa função sobe um erro
+
+
+def confere_disc_id(channel_id):
+    response = confere_id("./whitelists/channel_whitelist.txt", channel_id)
+    raise_channel_error(channel_id, response)  # Caso seja False, essa função sobe um erro
+
+
+def raise_user_error(channel_id, response):
+    # Recebe True ou False dos comandos, caso seja False, avisa o usuário do Erro e levanta erro)
+    mensagem = "Você não tem permissão para usar esse comando"
+    if not response:
+        envia_msg(channel_id, mensagem)
+        raise ValueError("Usuário sem permissão")
+
+
+def raise_channel_error(channel_id, response):
+    # Recebe True ou False dos comandos, caso seja False, avisa o usuário do Erro e levanta erro)
+    mensagem = "Não é permitido enviar comandos nesse canal"
+    if not response:
+        envia_msg(channel_id, mensagem)
+        raise ValueError("Canal fora da Whitelist")
+
+
+"""
+Comandos para adicionar permissão para canais ou users:
+
+1 - add_channel_id_whitelist
+2 - remove_channel_id_whitelist
+"""
+
+def add_channel_id_whitelist(channel_id, added_channel_id):
+    canal_presente = confere_id("./whitelists/channel_whitelist.txt", added_channel_id)  # Confere canais na lista
+    if canal_presente:
+        envia_msg(channel_id, "Canal já presente na Whitelist")  # Avisa o usuário
+        raise ValueError("Canal já presente na Whitelist")  # Levanta erro para evitar a duplicação de Id's
+    else:
+        with open("./whitelists/channel_whitelist.txt", "a") as whitelist_doc:
+            whitelist_doc.write(str(added_channel_id) + "\n")  # Caso contrário, adiciona o Id
+        whitelist_doc.close()
+
+
+def remove_channel_id_whitelist(channel_id, removed_channel_id):
+    canal_presente = confere_id("./whitelists/channel_whitelist.txt", removed_channel_id)  # Confere canais na lista
+    if not canal_presente:  # Se o canal não estiver na whitelist
+        envia_msg(channel_id, "Canal não presente na Whitelist")
+        raise ValueError("Canal não presente na Whitelist")
+    else:
+        with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
+            lines = whitelist_doc.readlines()  # retorna todos os Id's
+            whitelist_doc.close()
+        with open("./whitelists/channel_whitelist.txt", "w") as whitelist_doc:
+            for line in lines:
+                if line.strip("\n") != str(removed_channel_id):  # Se a linha for igual à removida, não escreve
+                    whitelist_doc.write(line)
+        whitelist_doc.close()
+
+
+"""
+Comandos para facilitar o envio de mensagens/arquivos no discord, podendo ser usados fora
+de funções assíncronas
+
+1 - envia_msg
+2 - envia_arquivo (Desenvolvimento)
+"""
+
+def envia_msg(channel_id, mensagem):
+    # Função para facilitar o envio de mensagens pelo bot por meio de funções não assíncronas
+    channel = client.get_channel(channel_id)
+    client.loop.create_task(channel.send(mensagem))
+
+
+def envia_arquivo():  # Em desenvolvimento
+    pass
+
+
+"""
+Comandos relacionados à API da Hirez com retorno em texto (serve para Paladins e Smite):
+Obs.: O jogo é diferenciado pela variável game, que é a requisição do jogo usado
+
+1 - pegar_id
+2 - pegar_replay
+3 - pegar_stats (Retorno em arquivo .txt)
+"""
 
 def pegar_id(match_id, game):
     match_inf = game.getMatch(match_id)  # Instancia as informações da partida
@@ -282,139 +395,80 @@ def pegar_stats(match_id, game):
     log.close()
 
 
-def confere_id(arquivo, used_id):
-    response = False
-    for loop in DocIterator(arquivo, used_id):  # Percorre os Id's
-        if loop:  # Se retornar True (id presente no doc)
-            response = True
-            break
-    return response
+"""
+Comandos relacionados à API da Hirez com retorno em imagem (serve para Paladins e Smite):
+Obs.: O jogo é diferenciado pela variável game, que é a requisição do jogo usado
+
+Funções criadas por motivo de melhor sintaxe:
+    1 - cria_kda_stats (Função criada por motivo de melhor sintaxe)
+    2 - cria_stats_list
+
+Funções que encaminham as informações para o arquivo de criação de imagem (imgcreation.py)
+    1 - cria_imagem
+"""
+
+def cria_kda_stats(player, kda_list):
+    index = 0
+    kda_stat = ""
+    for stat in kda_list:
+        if index != 1:  # Se não for o do meio, só printa o stat
+            kda_stat += str(player[stat])
+        else:  # Se for o do meio, printa as barras junto
+            kda_stat += "/" + str(player[stat]) + "/"
+        index += 1
 
 
-def confere_user_id(user_id, channel_id):
-    response = confere_id("./whitelists/user_id_whitelist.txt", user_id)
-    raise_user_error(channel_id, response)  # Caso seja False, essa função sobe um erro
-
-
-def confere_disc_id(channel_id):
-    response = confere_id("./whitelists/channel_whitelist.txt", channel_id)
-    raise_channel_error(channel_id, response)  # Caso seja False, essa função sobe um erro
-
-
-def add_channel_id_whitelist(channel_id, added_channel_id):
-    canal_presente = confere_id("./whitelists/channel_whitelist.txt", added_channel_id)  # Confere canais na lista
-    if canal_presente:
-        envia_msg(channel_id, "Canal já presente na Whitelist")  # Avisa o usuário
-        raise ValueError("Canal já presente na Whitelist")  # Levanta erro para evitar a duplicação de Id's
-    else:
-        with open("./whitelists/channel_whitelist.txt", "a") as whitelist_doc:
-            whitelist_doc.write(str(added_channel_id) + "\n")  # Caso contrário, adiciona o Id
-        whitelist_doc.close()
-
-
-def remove_channel_id_whitelist(channel_id, removed_channel_id):
-    canal_presente = confere_id("./whitelists/channel_whitelist.txt", removed_channel_id)  # Confere canais na lista
-    if not canal_presente:  # Se o canal não estiver na whitelist
-        envia_msg(channel_id, "Canal não presente na Whitelist")
-        raise ValueError("Canal não presente na Whitelist")
-    else:
-        with open("./whitelists/channel_whitelist.txt", "r") as whitelist_doc:
-            lines = whitelist_doc.readlines()  # retorna todos os Id's
-            whitelist_doc.close()
-        with open("./whitelists/channel_whitelist.txt", "w") as whitelist_doc:
-            for line in lines:
-                if line.strip("\n") != str(removed_channel_id):  # Se a linha for igual à removida, não escreve
-                    whitelist_doc.write(line)
-        whitelist_doc.close()
-
-
-def raise_user_error(channel_id, response):
-    # Recebe True ou False dos comandos, caso seja False, avisa o usuário do Erro e levanta erro)
-    mensagem = "Você não tem permissão para usar esse comando"
-    if not response:
-        envia_msg(channel_id, mensagem)
-        raise ValueError("Usuário sem permissão")
-
-
-def raise_channel_error(channel_id, response):
-    # Recebe True ou False dos comandos, caso seja False, avisa o usuário do Erro e levanta erro)
-    mensagem = "Não é permitido enviar comandos nesse canal"
-    if not response:
-        envia_msg(channel_id, mensagem)
-        raise ValueError("Canal fora da Whitelist")
-
-
-def envia_msg(channel_id, mensagem):
-    # Função para facilitar o envio de mensagens pelo bot por meio de funções não assíncronas
-    channel = client.get_channel(channel_id)
-    client.loop.create_task(channel.send(mensagem))
-
-
-def envia_arquivo():  # Em desenvolvimento
-    pass
-
-
-def cria_paladins_imagem_stats(match_id):
-    global paladins_champions
-    global paladins_itens
-    global winner_team
-    global loser_team
-    teams_list = [winner_team, loser_team]
-    icons_id_list = []
+def cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3):
     stats_list = []
-    match_inf = paladins_req.getMatch(match_id)  # Instancia os stats da partida
-    stats_reference_1 = ["playerName", "Gold_Earned"]
-    stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
-    stats_reference_3 = ["Killing_Spree", "Objective_Assists", "Damage_Player", "Damage_Mitigated", "Healing"]
-
-    # Acima é a lista dos stats que serão passados para colagem
-    for player in match_inf:  # Pra cada jogador, adiciona Id de champ na lista
-        kda_stat = ""
-        index = 0
-        icons_id_list.append(player["ChampionId"])
-        for stat_1 in stats_reference_1:  # Pra cada stat na referência, adiciona o stat na lista
-            stats_list.append(player[stat_1])
-        for stat_2 in stats_reference_2:
-            if index != 1:
-                kda_stat += str(player[stat_2])
-            else:
-                kda_stat += "/" + str(player[stat_2]) + "/"
-            index += 1
-        stats_list.append(kda_stat)
+    for player in match_inf:  # Pra cada jogador
+        if type(stats_reference_1) == list:    # confere se é lista ou string
+            for stat_1 in stats_reference_1:  # Pra cada stat na referência, adiciona o stat na lista
+                stats_list.append(player[stat_1])
+        else: stats_list.append(player.stats_reference_1) # se for str, só adiciona na lista
+        stats_list.append(cria_kda_stats(player, stats_reference_2))  # Forma o texto do KDA e coloca na lista
         for stat_3 in stats_reference_3:
-            stats_list.append(player[stat_3])
-    # Passa as infos pra outro arquivo montar a imagem
-    create_paladins_stats_img(icons_id_list, stats_list, teams_list, paladins_champions, paladins_itens)
+            stats_list.append(player[stat_3])  # Coloca o resto dos stats depois do KDA
+    return stats_list
 
-def cria_smite_imagem_stats(match_id):
-    match_inf = smite_req.getMatch(match_id)
-    global smite_gods
-    global smite_itens
+
+def cria_imagem(match_id, game):
+    global smite_gods, smite_itens, paladins_champions, paladins_itens, winner_team, loser_team
     icons_id_list = []
-    stats_list = []
     nicks_list = []
-    stats_reference_1 = "Final_Match_Level"
-    stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
-    stats_reference_3 = ["Gold_Earned", "Gold_Per_Minute", "Damage_Player", "Damage_Bot", "Damage_Taken",
-                         "Damage_Mitigated", "Structure_Damage", "Healing", "Wards_Placed"]
+    teams_list = [winner_team, loser_team]
 
-    for player in match_inf:
-        icons_id_list.append(player["GodId"])
-        nicks_list.append(player["hz_player_name"])
-        index = 0
-        kda_stat = ""
-        stats_list.append(player[stats_reference_1])
-        for stat_2 in stats_reference_2:
-            if index != 1:
-                kda_stat += str(player[stat_2])
-            else:
-                kda_stat += "/" + str(player[stat_2]) + "/"
-            index += 1
-        stats_list.append(kda_stat)
-        for stat_3 in stats_reference_3:
-            stats_list.append(player[stat_3])
-    create_smite_stats_img(icons_id_list, nicks_list, stats_list, smite_gods, smite_itens)
+    if game == paladins_req:
+        match_inf = paladins_req.getMatch(match_id)  # Instancia os stats da partida
+        stats_reference_1 = ["playerName", "Gold_Earned"]
+        stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
+        stats_reference_3 = ["Killing_Spree", "Objective_Assists", "Damage_Player", "Damage_Mitigated", "Healing"]
+        # Acima são as listas dos stats que serão passados para colagem
 
+        for player in match_inf:  # Pra cada jogador
+            icons_id_list.append(player["ChampionId"])  # adiciona Id de champ na lista
+
+        #Cria a lista de stats
+        stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
+
+        # Passa as infos pra outro arquivo montar a imagem
+        create_paladins_stats_img(icons_id_list, stats_list, teams_list, paladins_champions, paladins_itens)
+
+    elif game == smite_req:
+        match_inf = smite_req.getMatch(match_id)
+        stats_reference_1 = "Final_Match_Level"
+        stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
+        stats_reference_3 = ["Gold_Earned", "Gold_Per_Minute", "Damage_Player", "Damage_Bot", "Damage_Taken",
+                             "Damage_Mitigated", "Structure_Damage", "Healing", "Wards_Placed"]
+        # Acima são as listas dos stats que serão passados para colagem
+
+        for player in match_inf:  # Pra cada jogador
+            icons_id_list.append(player["GodId"])  # adiciona Id de god na lista
+
+        # Cria a lista de stats
+        stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
+
+        # Passa as infos pra outro arquivo montar a imagem
+        create_smite_stats_img(icons_id_list, nicks_list, stats_list, smite_gods, smite_itens)
 
 
 # Código para executar o Bot com as configurações pré-definidas
