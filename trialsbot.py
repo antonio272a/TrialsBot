@@ -56,6 +56,7 @@ async def on_message(message):  # Ao receber mensagem
                                           '.stats-paladins ou .stats-smite')
         embed.add_field(name=".stats", value="Retorna o arquivo de texto com todos os stats da partida")
         embed.add_field(name=".id", value="Retorna os Id's de todos os jogadores, com exceção dos perfil privados")
+        embed.add_field(name=".id", value="Retorna o Id do nick enviado")
         embed.add_field(name=".replay",
                         value="Renorna os players da partida pra conferência, junto com a informação de caso a "
                               "partida tenha Replay ou não")
@@ -94,6 +95,17 @@ async def on_message(message):  # Ao receber mensagem
         match_id = retorno[1]
         details_players = pegar_id(match_id, game)  # Retorna a mensagem já formulada para envio
         envia_msg(channel_id, details_players)  # Envia mensagem no canal remetente do discord
+
+    if message.content.find(".playerid") != -1:
+        await message.channel.send(content="Comando recebido", embed=None)  # Colocado sem função por agilidade no envio
+        mensagem = message.content
+        channel_id = message.channel.id
+        retorno = refatorando_cmd_mods(channel_id, mensagem)  # Função para simplificar o código
+        game = retorno[0]
+        player_name = retorno[1]
+        player_id = game.getPlayerId(player_name)[0]["player_id"]
+        player_info = "Nick: " + player_name + " - id: " + str(player_id)
+        envia_msg(channel_id, player_info)  # Envia mensagem no canal remetente do discord
 
     if message.content.find(".replay") != -1:  # Retorna se possui replay ou não
         await message.channel.send(content="Comando recebido", embed=None)  # Colocado sem função por agilidade no envio
@@ -184,7 +196,7 @@ def reconhecer_comando(mensagem, content):
 
 
 def reconhece_jogo(channel_id, mensagem):
-    comandos = [".id", ".stats", ".replay", ".image", ".winner", ".loser"]
+    comandos = [".id", ".playerid", ".stats", ".replay", ".image", ".winner", ".loser"]
     jogos = {"smite": smite_req, "paladins": paladins_req}
     for jogo in jogos:  # Percorre a lista de jogos instanciados acima
         if mensagem.find(jogo) != -1:  # Se achar o jogo dentro da mensagem
