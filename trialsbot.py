@@ -3,7 +3,7 @@ import pyrezfix as pyrez
 import asyncio
 import json
 from json import JSONEncoder
-from imgcreation import create_paladins_stats_img
+from imgcreation import create_paladins_stats_img, create_smite_stats_img
 from iterator import DocIterator
 
 
@@ -27,8 +27,11 @@ smite_req = pyrez.SmiteAPI(devId=devId_Hirez, authKey=authKey_Hirez)
 session_id_paladins = paladins_req._createSession()
 session_id_smite = smite_req._createSession()
 
-champions = paladins_req.getChampions()  # Instancia lista de campeões
-itens = paladins_req.getItems()  # Instancia lista de itens
+#print(smite_req.getMatch(1157950731))
+paladins_champions = paladins_req.getChampions()  # Instancia lista de campeões
+paladins_itens = paladins_req.getItems()  # Instancia lista de itens
+smite_gods = smite_req.getGods()
+smite_itens = smite_req.getItems()
 
 # Subindo o Bot no discord
 client = discord.Client()
@@ -69,8 +72,14 @@ async def on_message(message):  # Ao receber mensagem
         channel_id = message.channel.id
         retorno = refatorando_cmd_mods(channel_id, mensagem)  # Função para simplificar o código
         match_id = retorno[1]
-        cria_paladins_imagem_stats(match_id)  # Cria as imagens e salva
-        with open("./createdimages/Teste.png", 'rb') as file:  # Envia arquivo no discord
+        game = retorno[0]
+        if game == paladins_req:
+            cria_paladins_imagem_stats(match_id)  # Cria as imagens e salva
+            imagem = "Teste-paladins.png"
+        else:
+            cria_smite_imagem_stats(match_id)
+            imagem = "Teste-smite.png"
+        with open("./createdimages/" + imagem, 'rb') as file:  # Envia arquivo no discord
             await message.channel.send(file=discord.File(file, "Image.png"))
         file.close()
 
@@ -346,8 +355,8 @@ def envia_arquivo():  # Em desenvolvimento
 
 
 def cria_paladins_imagem_stats(match_id):
-    global champions
-    global itens
+    global paladins_champions
+    global paladins_itens
     global winner_team
     global loser_team
     teams_list = [winner_team, loser_team]
@@ -375,7 +384,37 @@ def cria_paladins_imagem_stats(match_id):
         for stat_3 in stats_reference_3:
             stats_list.append(player[stat_3])
     # Passa as infos pra outro arquivo montar a imagem
-    create_paladins_stats_img(icons_id_list, stats_list, teams_list, champions, itens)
+    create_paladins_stats_img(icons_id_list, stats_list, teams_list, paladins_champions, paladins_itens)
+
+def cria_smite_imagem_stats(match_id):
+    match_inf = smite_req.getMatch(match_id)
+    global smite_gods
+    global smite_itens
+    icons_id_list = []
+    stats_list = []
+    nicks_list = []
+    stats_reference_1 = "Final_Match_Level"
+    stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
+    stats_reference_3 = ["Gold_Earned", "Gold_Per_Minute", "Damage_Player", "Damage_Bot", "Damage_Taken",
+                         "Damage_Mitigated", "Structure_Damage", "Healing", "Wards_Placed"]
+
+    for player in match_inf:
+        icons_id_list.append(player["GodId"])
+        nicks_list.append(player["hz_player_name"])
+        index = 0
+        kda_stat = ""
+        stats_list.append(player[stats_reference_1])
+        for stat_2 in stats_reference_2:
+            if index != 1:
+                kda_stat += str(player[stat_2])
+            else:
+                kda_stat += "/" + str(player[stat_2]) + "/"
+            index += 1
+        stats_list.append(kda_stat)
+        for stat_3 in stats_reference_3:
+            stats_list.append(player[stat_3])
+    create_smite_stats_img(icons_id_list, nicks_list, stats_list, smite_gods, smite_itens)
+
 
 
 # Código para executar o Bot com as configurações pré-definidas
