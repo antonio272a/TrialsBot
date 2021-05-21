@@ -14,7 +14,7 @@ def read_token():
         return lines[0].strip()
 
 
-# Atribuindo o token a uma variavel
+# Atribuindo o token à uma variavel
 token = read_token()
 
 # Código de requisição à API da Hirez
@@ -36,7 +36,7 @@ smite_itens = smite_req.getItems()
 # Subindo o Bot no discord
 client = discord.Client()
 
-# Variáveis globais para print de imagem
+# Variáveis globais para print dos times nas imagens
 winner_team = "[VKS]"
 loser_team = "[GL]"
 
@@ -44,7 +44,7 @@ loser_team = "[GL]"
 # Código quando é enviado uma mensagem ao Bot
 @client.event
 # Comandos
-async def on_ready():
+async def on_ready(): #Quando o bot fica pronto
     await client.change_presence(activity=discord.Game(name=".help"))
     print("Iniciado")
 
@@ -197,7 +197,7 @@ Funções para sequencia de funções/comandos repetidos:
 
 def refatorando_cmd_mods(channel_id, mensagem):
     confere_disc_id(channel_id)  # Confere o Id do canal
-    retorno = reconhece_jogo(channel_id, mensagem)  # Retorna a requisição e a str do comando sem o match_id
+    retorno = reconhece_jogo(channel_id, mensagem)  # Retorna a requisição do jogo e a string do comando sem o match_id
     game = retorno[0]
     comando = retorno[1]
     match_id = reconhecer_comando(mensagem, comando)  # Retira o comando da mensagem, sobrando só o match_id
@@ -408,7 +408,7 @@ Funções que encaminham as informações para o arquivo de criação de imagem 
 """
 
 def cria_kda_stats(player, kda_list):
-    index = 0
+    index = 0  # index para saber qual informação do kda está sendo usada
     kda_stat = ""
     for stat in kda_list:
         if index != 1:  # Se não for o do meio, só printa o stat
@@ -445,7 +445,7 @@ def cria_imagem(match_id, game):
         # Acima são as listas dos stats que serão passados para colagem
 
         for player in match_inf:  # Pra cada jogador
-            icons_id_list.append(player["ChampionId"])  # adiciona Id de champ na lista
+            icons_id_list.append(player["ChampionId"])  # adiciona Id do champ na lista
 
         #Cria a lista de stats
         stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
@@ -462,7 +462,7 @@ def cria_imagem(match_id, game):
         # Acima são as listas dos stats que serão passados para colagem
 
         for player in match_inf:  # Pra cada jogador
-            icons_id_list.append(player["GodId"])  # adiciona Id de god na lista
+            icons_id_list.append(player["GodId"])  # adiciona Id do god na lista
 
         # Cria a lista de stats
         stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
