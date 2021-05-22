@@ -3,7 +3,7 @@ import pyrezfix as pyrez
 import asyncio
 import json
 from json import JSONEncoder
-from imgcreation import create_paladins_stats_img, create_smite_stats_img
+from imgcreation import create_stats_img
 from iterator import DocIterator
 
 
@@ -22,6 +22,7 @@ devId_Hirez = "3656"
 authKey_Hirez = "310114B6E36447369BBD3F35034995AC"
 paladins_req = pyrez.PaladinsAPI(devId=devId_Hirez, authKey=authKey_Hirez)
 smite_req = pyrez.SmiteAPI(devId=devId_Hirez, authKey=authKey_Hirez)
+
 
 # Código para gerar uma nova sessão da API
 session_id_paladins = paladins_req._createSession()
@@ -424,7 +425,8 @@ def cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_refer
         if type(stats_reference_1) == list:    # confere se é lista ou string
             for stat_1 in stats_reference_1:  # Pra cada stat na referência, adiciona o stat na lista
                 stats_list.append(player[stat_1])
-        else: stats_list.append(player.stats_reference_1) # se for str, só adiciona na lista
+        else:
+            stats_list.append(player[stats_reference_1])  # se for str, só adiciona na lista
         stats_list.append(cria_kda_stats(player, stats_reference_2))  # Forma o texto do KDA e coloca na lista
         for stat_3 in stats_reference_3:
             stats_list.append(player[stat_3])  # Coloca o resto dos stats depois do KDA
@@ -432,11 +434,13 @@ def cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_refer
 
 
 def cria_imagem(match_id, game):
+    # Instancia todas as listas e variáveis que os jogos vão precisar
     global smite_gods, smite_itens, paladins_champions, paladins_itens, winner_team, loser_team
     icons_id_list = []
     nicks_list = []
     teams_list = [winner_team, loser_team]
 
+    # Caso seja Paladins
     if game == paladins_req:
         match_inf = paladins_req.getMatch(match_id)  # Instancia os stats da partida
         stats_reference_1 = ["playerName", "Gold_Earned"]
@@ -451,8 +455,10 @@ def cria_imagem(match_id, game):
         stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
 
         # Passa as infos pra outro arquivo montar a imagem
-        create_paladins_stats_img(icons_id_list, stats_list, teams_list, paladins_champions, paladins_itens)
+        create_stats_img("paladins", icons_id_list, nicks_list, stats_list, teams_list,
+                         paladins_champions, paladins_itens)
 
+    #Caso seja smite
     elif game == smite_req:
         match_inf = smite_req.getMatch(match_id)
         stats_reference_1 = "Final_Match_Level"
@@ -468,7 +474,8 @@ def cria_imagem(match_id, game):
         stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
 
         # Passa as infos pra outro arquivo montar a imagem
-        create_smite_stats_img(icons_id_list, nicks_list, stats_list, smite_gods, smite_itens)
+        create_stats_img("smite", icons_id_list, nicks_list, stats_list, teams_list,
+                         smite_gods, smite_itens)
 
 
 # Código para executar o Bot com as configurações pré-definidas
