@@ -31,6 +31,8 @@ session_id_smite = smite_req._createSession()
 #print(smite_req.getMatch(1157950731))
 paladins_champions = paladins_req.getChampions()  # Instancia lista de campeões
 paladins_itens = paladins_req.getItems()  # Instancia lista de itens
+if paladins_itens == None:
+    paladins_itens = paladins_req.getItems()
 smite_gods = smite_req.getGods()
 smite_itens = smite_req.getItems()
 
@@ -60,11 +62,13 @@ async def on_message(message):  # Ao receber mensagem
                                           '.stats-paladins ou .stats-smite')
         embed.add_field(name=".stats", value="Retorna o arquivo de texto com todos os stats da partida")
         embed.add_field(name=".id", value="Retorna os Id's de todos os jogadores, com exceção dos perfil privados")
-        embed.add_field(name=".id", value="Retorna o Id do nick enviado")
+        embed.add_field(name=".playerid", value="Retorna o Id do nick enviado")
         embed.add_field(name=".replay",
                         value="Renorna os players da partida pra conferência, junto com a informação de caso a "
                               "partida tenha Replay ou não")
         embed.add_field(name=".image (Pré-alpha)", value="Retorna a imagem dos stats da partida")
+        embed.add_field(name=".winner", value="define o time vencedor para colagem nas imagems (Máx de 3 letras)")
+        embed.add_field(name=".loser", value="define o time perdedor para colagem nas imagems (Máx de 3 letras)")
         await message.channel.send(content=None, embed=embed)
 
     if message.content.find(".image") != -1:  # Retona imagem dos resultados
@@ -417,6 +421,7 @@ def cria_kda_stats(player, kda_list):
         else:  # Se for o do meio, printa as barras junto
             kda_stat += "/" + str(player[stat]) + "/"
         index += 1
+    return kda_stat
 
 
 def cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3):
@@ -443,6 +448,7 @@ def cria_imagem(match_id, game):
     # Caso seja Paladins
     if game == paladins_req:
         match_inf = paladins_req.getMatch(match_id)  # Instancia os stats da partida
+        print(match_inf)
         stats_reference_1 = ["playerName", "Gold_Earned"]
         stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
         stats_reference_3 = ["Killing_Spree", "Objective_Assists", "Damage_Player", "Damage_Mitigated", "Healing"]
@@ -451,14 +457,14 @@ def cria_imagem(match_id, game):
         for player in match_inf:  # Pra cada jogador
             icons_id_list.append(player["ChampionId"])  # adiciona Id do champ na lista
 
-        #Cria a lista de stats
-        stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
+            # Cria a lista de stats
+            stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
 
         # Passa as infos pra outro arquivo montar a imagem
         create_stats_img("paladins", icons_id_list, nicks_list, stats_list, teams_list,
                          paladins_champions, paladins_itens)
 
-    #Caso seja smite
+    # Caso seja smite
     elif game == smite_req:
         match_inf = smite_req.getMatch(match_id)
         stats_reference_1 = "Final_Match_Level"
@@ -469,7 +475,7 @@ def cria_imagem(match_id, game):
 
         for player in match_inf:  # Pra cada jogador
             icons_id_list.append(player["GodId"])  # adiciona Id do god na lista
-
+            nicks_list.append(player["hz_player_name"])
         # Cria a lista de stats
         stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
 

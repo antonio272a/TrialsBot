@@ -43,8 +43,10 @@ def pega_stat_img(game, stat_id, champions, itens):
         for champ in champions:
             if champ["id"] == stat_id:
                 url = champ["ChampionIcon_URL"]
+                ischampions = True
                 try:
-                    forma_img_2x1(url)
+                    img = forma_img_2x1(url)
+                    return img
                 except:
                     pass
                 break
@@ -55,7 +57,8 @@ def pega_stat_img(game, stat_id, champions, itens):
             if champ["id"] == stat_id:
                 url = champ["godIcon_URL"]
                 try:
-                    forma_img_1x1(url)
+                    img = forma_img_1x1(url)
+                    return img
                 except:
                     pass
                 break
@@ -112,7 +115,7 @@ def itens_paste(game, stat_id_list, bkg, champions, itens):
 
 def icons_paste(game, icon_id_list, bkg, champions, itens):
     if game == "paladins":
-        box = [40, 100]  # Aonde os ícones vão começar a ser colados
+        box = [100, 134]  # Aonde os ícones vão começar a ser colados
         line_count = 0  # Contagem de linhas, para fazer o espaçamento
         size = (96, 48)  # Tamano que os ícones serão dimensionados
         height = 60  # Altura entre um ícone e outro
@@ -125,13 +128,13 @@ def icons_paste(game, icon_id_list, bkg, champions, itens):
             bkg.paste(icon_img, new_box)  # Cola na imagem base
             line_count += 1
     elif game == "smite":
-        box = [162, 80]  # Aonde os ícones vão começar a ser colados
+        box = [350, 60]  # Aonde os ícones vão começar a ser colados
         collum_count = 0  # Contagem de colunas, para fazer o espaçamento
         size = (96, 96)  # Tamano que os ícones serão dimensionados
         lenght = 100  # Distância horizontal entre um ícone e outro
         for icon_id in icon_id_list:  # Passa entre todos os ids dos ícones
             if collum_count == 5:  # Quando a coluna for 5, ou seja, quando passar para o outro time
-                box[0] += 84   # Espaço a mais entre um time e outro
+                box[0] += 62  # Espaço a mais entre um time e outro
             new_box = [box[0] + lenght * collum_count, box[1]]  # Cria a box de colagem levando em conta as colunas
             icon_img = pega_stat_img(game, icon_id, champions, itens)  # Transforma o Id em imagem pela função
             icon_img = icon_img.resize(size)  # Redimensiona a imagem
@@ -143,7 +146,7 @@ def teams_paste(game, teams_list, bkg):
     font = ImageFont.truetype("./fonts/Arial.ttf", 16)  # Define a fonte do stat
     draw = ImageDraw.Draw(bkg)  # Método para "desenhar" o stat na imagem
     if game == "paladins":
-        start_box = [176, 116]  # Aonde os times vão começar a ser colados
+        start_box = [220, 150]  # Aonde os times vão começar a ser colados
         line_count = 0  # Contagem de linhas, para fazer o espaçamento
         index = 0  # index para poder saber quando trocar de um time pro outro e quando parar de colar os times
 
@@ -168,36 +171,49 @@ def stats_paste(game, stats_list, bkg):
     font = ImageFont.truetype("./fonts/Arial.ttf", 16)  # Define a fonte do stat
     draw = ImageDraw.Draw(bkg)  # Método para "desenhar" o stat na imagem
     if game == "paladins":
-        length = [0, 276, 392, 528, 588, 692, 812, 932]  # As distâncias horizontais entres os stats
+        length = [0, 296, 422, 548, 608, 712, 832, 952]  # As distâncias horizontais entres os stats
         count = 8  # Contagem total de stats para saber quando passar para o próximo player
-        start_box = [260, 116]  # Aonde os stats vão começar a ser colados
+        start_box = [300, 153]  # Aonde os stats vão começar a ser colados
         for stat in stats_list:  # percorre todos os stats (str)
+            plus = 0  # Número para centralizar os stats de kda
             if line_count == 4 and collum_count == 8:  # Quando passar de um time pro outro
                 start_box[1] += 12  # Coloca o espaçamento entre os times
             if collum_count == count:  # Quando chega no último stat do player
                 collum_count = 0  # Reseta a contagem de colunas
                 line_count += 1  # Passa pro próximo player
-            box = [start_box[0] + length[collum_count], start_box[1] + 60 * line_count]  # Cria a box de colagem
-            draw.text(box, str(stat), (255, 255, 255), font)  # Desenha o stat
+            if collum_count == 2:
+                if len(stat) == 7:
+                    plus = 5
+                elif len(stat) == 6:
+                    plus = 10
+                elif len(stat) == 5:
+                    plus = 13
+            box = [start_box[0] + length[collum_count] + plus, start_box[1] + 60 * line_count]  # Cria a box de colagem
+            draw.text(box, str(stat), (0, 0, 0), font)  # Desenha o stat
             collum_count += 1
     elif game == "smite":
         length = 100  # A distância horizontal entres os stats
         height = 44  # A distância vertical entre os players
         count = 11  # Número de stats por player
-        start_box = [190, 204]  # Aonde os stats vão começar a ser colados
+        start_box = [380, 240]  # Aonde os stats vão começar a ser colados
         for stat in stats_list:  # percorre todos os stats (str)
             if line_count == count:  # Quando chega no último stat do player
                 collum_count += 1  # Passa pra póxima coluna
                 line_count = 0  # Reseta a contagem de linhas
             if line_count == 0:  # Quando for o primeiro stat a ser colado
-                lvl = 10  # Coloca essa distância, pois o lvl precisa de uma distância a mais pra ser colado
+                plus = 10  # Coloca essa distância, pois o lvl precisa de uma distância a mais pra ser colado
                 if collum_count == 5:  # Quando chegar no primeiro player do próximo time
-                    start_box[0] += 84  # Colcoa a distância entre os times
-            box = [start_box[0] + length * collum_count + lvl, start_box[1] + height * line_count]
+                    start_box[0] += 62  # Colcoa a distância entre os times
+            elif line_count == 1:
+                if len(stat) >= 8:
+                    plus = -8
+            elif line_count == 3:
+                plus = 8
+            box = [start_box[0] + length * collum_count + plus, start_box[1] + height * line_count]
             # Cria o box de colagem
             draw.text(box, str(stat), (0, 0, 0), font)  # Desenha o stat na imagem
             line_count += 1
-            lvl = 0  # Reseta a distância do lvl pra não dar problema de colagem errada
+            plus = 0  # Reseta a distância do lvl pra não dar problema de colagem errada
 
 
 def nicks_paste(game, nicks_list, bkg):
@@ -207,7 +223,7 @@ def nicks_paste(game, nicks_list, bkg):
     elif game == "smite":
         collum_count = 0  # Contagem de colunas para fazer o espaçamento
         length = 100  # Distância horizontal entre os nomes
-        start_box = [162, 180]  # Aonde os nomes vão começar a ser colados
+        start_box = [350, 185]  # Aonde os nomes vão começar a ser colados
         font = ImageFont.truetype("./fonts/Arial.ttf", 12)  # Define a fonte dos nicks
         draw = ImageDraw.Draw(bkg)  # Método para "desenhar" o stat na imagem
         for nick in nicks_list:  # Pra cada nick na lista
@@ -224,9 +240,9 @@ def nicks_paste(game, nicks_list, bkg):
             else:
                 len_nick = 6
             if collum_count == 5:  # Quando chegar no sexto player, ou seja, primeiro jogador do time perdedor
-                start_box[0] += 84  # Distância entre os times
+                start_box[0] += 62  # Distância entre os times
             box = [start_box[0] + length * collum_count + len_nick, start_box[1]]  # Cria a box para colagem
-            draw.text(box, str(nick), (0, 0, 0), font)  # Desenha na imagem
+            draw.text(box, str(nick), (255, 255, 255), font)  # Desenha na imagem
             collum_count += 1
 
 
@@ -240,7 +256,7 @@ Obs. 2: O jogo é diferenciado pela variável game, que é o nome do jogo em uma
 
 def create_stats_img(game, icons_id_list, nicks_list, stats_list, teams_list, champions, itens):
     if game == "paladins":
-        bkg = Image.open("./images/bkg.png")  # Abre a imagem
+        bkg = Image.open("./images/bkg-paladins.png")  # Abre a imagem
         icons_paste(game, icons_id_list, bkg, champions, itens)  # Cola os ícones
         teams_paste(game, teams_list, bkg)  # Cola os times
         stats_paste(game, stats_list, bkg)  # Cola os stats e os nomes
