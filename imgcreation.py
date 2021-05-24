@@ -171,7 +171,7 @@ def stats_paste(game, stats_list, bkg):
     font = ImageFont.truetype("./fonts/Arial.ttf", 16)  # Define a fonte do stat
     draw = ImageDraw.Draw(bkg)  # Método para "desenhar" o stat na imagem
     if game == "paladins":
-        length = [0, 296, 422, 548, 608, 712, 832, 952]  # As distâncias horizontais entres os stats
+        length = [0, 296, 422, 548, 623, 712, 832, 952]  # As distâncias horizontais entres os stats
         count = 8  # Contagem total de stats para saber quando passar para o próximo player
         start_box = [300, 153]  # Aonde os stats vão começar a ser colados
         for stat in stats_list:  # percorre todos os stats (str)
@@ -182,6 +182,7 @@ def stats_paste(game, stats_list, bkg):
                 collum_count = 0  # Reseta a contagem de colunas
                 line_count += 1  # Passa pro próximo player
             if collum_count == 2:
+                # If's para verificar comprimento do kda para centralizar
                 if len(stat) == 7:
                     plus = 5
                 elif len(stat) == 6:

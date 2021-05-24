@@ -1,5 +1,5 @@
 import discord
-import pyrezfix as pyrez
+import pyrez
 import asyncio
 import json
 from json import JSONEncoder
