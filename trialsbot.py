@@ -28,10 +28,9 @@ smite_req = pyrez.SmiteAPI(devId=devId_Hirez, authKey=authKey_Hirez)
 session_id_paladins = paladins_req._createSession()
 session_id_smite = smite_req._createSession()
 
-#print(smite_req.getMatch(1157950731))
 paladins_champions = paladins_req.getChampions()  # Instancia lista de campeões
 paladins_itens = paladins_req.getItems()  # Instancia lista de itens
-if paladins_itens == None:
+if paladins_itens is None:
     paladins_itens = paladins_req.getItems()
 smite_gods = smite_req.getGods()
 smite_itens = smite_req.getItems()
@@ -351,15 +350,23 @@ def pegar_id(match_id, game):
     match_inf = game.getMatch(match_id)  # Instancia as informações da partida
     details_players = ""
     index = 0  # Index usado para separar os times
-    for details in match_inf:  # Confere se a conta do player é privada, nome retorna vazio
-        if details["playerName"] == "":
-            player_name = "Privado"  # Troca nome vazio
-            player_id = "Privado"  # Troca Id 0
-        else:
-            player_name = details["playerName"]
-            player_id = details["playerId"]
-        details_players += "\n" + details["Win_Status"] + " - " + "Nick: " + player_name + " - " + "Campeão: " + \
-                           details["Reference_Name"] + " - " + "id: " + player_id  # Adiciona stats na mensagem
+    for player in match_inf:  # Confere se a conta do player é privada, nome retorna vazio
+        if game == paladins_req:
+            if player["playerName"] == "":
+                player_name = "Privado"  # Troca nome vazio
+                player_id = "Privado"  # Troca Id 0
+            else:
+                player_name = player["playerName"]
+                player_id = player["playerId"]
+
+        elif game == smite_req:
+            player_name = player["hz_player_name"]
+            player_id = player["playerId"]
+            if player_id == "0":
+                player_id = str(smite_req.getPlayerId(player_name)[0]["player_id"])
+
+        details_players += "\n" + player["Win_Status"] + " - " + "Nick: " + player_name + " - " + "Campeão: " + \
+                            player["Reference_Name"] + " - " + "id: " + player_id  # Adiciona stats na mensagem
         index += 1
         if index == 5:
             details_players += "\n" + "\n" + "--------------------" + "\n"
@@ -448,7 +455,6 @@ def cria_imagem(match_id, game):
     # Caso seja Paladins
     if game == paladins_req:
         match_inf = paladins_req.getMatch(match_id)  # Instancia os stats da partida
-        print(match_inf)
         stats_reference_1 = ["playerName", "Gold_Earned"]
         stats_reference_2 = ["Kills_Player", "Deaths", "Assists"]
         stats_reference_3 = ["Killing_Spree", "Objective_Assists", "Damage_Player", "Damage_Mitigated", "Healing"]
@@ -475,7 +481,18 @@ def cria_imagem(match_id, game):
 
         for player in match_inf:  # Pra cada jogador
             icons_id_list.append(player["GodId"])  # adiciona Id do god na lista
-            nicks_list.append(player["hz_player_name"])
+            if not player["playerName"]:
+                if not player["hz_player_name"]:
+                    player_name = ""
+                else:
+                    player_name = player["hz_player_name"]
+            else:
+                try:
+                    player_name = player["playerName"][player["playerName"].find("]") + 1:]
+                except:
+                    player_name = player["playerName"]
+            nicks_list.append(player_name)
+
         # Cria a lista de stats
         stats_list = cria_stats_list(match_inf, stats_reference_1, stats_reference_2, stats_reference_3)
 

@@ -11,6 +11,7 @@ Funções que transformam a URL em Imagem:
 2 - forma_img 2x1 - (Para colagens com proporção 2x1, ex.: colagem dos ícones do Paladins 96x48px
 """
 
+
 def forma_img_1x1(url):
     header = {"User-Agent": "Mozilla/5.0"}
     req = urllib.request.Request(url, None, header)
@@ -37,6 +38,7 @@ Obs. 2: O jogo é diferenciado pela variável game, que é o nome do jogo em uma
 
 1 - pega_stat_img
 """
+
 
 def pega_stat_img(game, stat_id, champions, itens):
     if game == "paladins":
@@ -87,6 +89,7 @@ Obs. 2: O jogo é diferenciado pela variável game, que é o nome do jogo em uma
 4 - teams_paste (Só no Paladins por enquanto)
 5 - nicks_paste (Só no Smite por enquanto)
 """
+
 
 def itens_paste(game, stat_id_list, bkg, champions, itens):
     # Igonorar por enquanto, função sem uso, necessita criar uma nova imagem e mudar todas as dimensões
@@ -196,25 +199,18 @@ def stats_paste(game, stats_list, bkg):
         length = 100  # A distância horizontal entres os stats
         height = 44  # A distância vertical entre os players
         count = 11  # Número de stats por player
-        start_box = [380, 240]  # Aonde os stats vão começar a ser colados
+        start_box = [398, 254]  # Aonde os stats vão começar a ser colados
         for stat in stats_list:  # percorre todos os stats (str)
             if line_count == count:  # Quando chega no último stat do player
                 collum_count += 1  # Passa pra póxima coluna
                 line_count = 0  # Reseta a contagem de linhas
-            if line_count == 0:  # Quando for o primeiro stat a ser colado
-                plus = 10  # Coloca essa distância, pois o lvl precisa de uma distância a mais pra ser colado
                 if collum_count == 5:  # Quando chegar no primeiro player do próximo time
                     start_box[0] += 62  # Colcoa a distância entre os times
-            elif line_count == 1:
-                if len(stat) >= 8:
-                    plus = -8
-            elif line_count == 3:
-                plus = 8
-            box = [start_box[0] + length * collum_count + plus, start_box[1] + height * line_count]
+            box = [start_box[0] + length * collum_count, start_box[1] + height * line_count]
+            # reference: https://pillow.readthedocs.io/en/stable/handbook/text-anchors.html
             # Cria o box de colagem
-            draw.text(box, str(stat), (0, 0, 0), font)  # Desenha o stat na imagem
+            draw.text(box, str(stat), (0, 0, 0), font, anchor="mb")  # Desenha o stat na imagem
             line_count += 1
-            plus = 0  # Reseta a distância do lvl pra não dar problema de colagem errada
 
 
 def nicks_paste(game, nicks_list, bkg):
@@ -224,28 +220,19 @@ def nicks_paste(game, nicks_list, bkg):
     elif game == "smite":
         collum_count = 0  # Contagem de colunas para fazer o espaçamento
         length = 100  # Distância horizontal entre os nomes
-        start_box = [350, 185]  # Aonde os nomes vão começar a ser colados
-        font = ImageFont.truetype("./fonts/Arial.ttf", 12)  # Define a fonte dos nicks
+        start_box = [397, 198]  # Aonde os nomes vão começar a ser colados
         draw = ImageDraw.Draw(bkg)  # Método para "desenhar" o stat na imagem
+        font_comparacao = ImageFont.truetype("./fonts/Arial.ttf", 12)
         for nick in nicks_list:  # Pra cada nick na lista
-            """
-            Os If's/elif's abaixo servem para verificar o tamanho do nick do player e dar o espaçamento correto
-            para que o nick fique o máximo centralizado possível
-            """
-            if len(nick) <= 6:
-                len_nick = 24
-            elif len(nick) <= 9:
-                len_nick = 18
-            elif len(nick) <= 12:
-                len_nick = 12
+            if draw.textsize(nick, font=font_comparacao)[0] > 96:  # Define a fonte dos nicks
+                font = ImageFont.truetype("./fonts/Arial.ttf", 10)
             else:
-                len_nick = 6
+                font = ImageFont.truetype("./fonts/Arial.ttf", 12)
             if collum_count == 5:  # Quando chegar no sexto player, ou seja, primeiro jogador do time perdedor
                 start_box[0] += 62  # Distância entre os times
-            box = [start_box[0] + length * collum_count + len_nick, start_box[1]]  # Cria a box para colagem
-            draw.text(box, str(nick), (255, 255, 255), font)  # Desenha na imagem
+            box = (start_box[0] + length * collum_count, start_box[1])  # Cria a box para colagem
+            draw.text(box, str(nick), (255, 255, 255), font, anchor="mb")  # Desenha na imagem
             collum_count += 1
-
 
 """
 Função que é importada pelo arquivo principal para criar as imagens
@@ -254,6 +241,7 @@ Obs. 2: O jogo é diferenciado pela variável game, que é o nome do jogo em uma
 
 1 - create_stats_img
 """
+
 
 def create_stats_img(game, icons_id_list, nicks_list, stats_list, teams_list, champions, itens):
     if game == "paladins":
@@ -276,30 +264,8 @@ def create_stats_img(game, icons_id_list, nicks_list, stats_list, teams_list, ch
 # "Damage_Player", "Healing"] itens_reference = ["ItemId1", "ItemId2", "ItemId3", "ItemId4", "ItemId5", "ItemId6",
 # "ActiveId1", "ActiveId2", "ActiveId3", "ActiveId4"] match_inf = paladins_req.getMatch(match) for player in
 # match_inf: for item in itens_reference: lista_stats.append(player[item])
-#
-# for player in match_inf:
-#     lista_champId.append(player["ChampionId"])
-
-# bkg.save("./createdimages/Teste.png")
 
 # #stats: [playerName]
 # champion: [ChampionId] - [Deaths] - [Assists] - [Gold_Earned]
 # baralho: [ItemId1 -> 6] (6 = lendária) - [ItemLevel1 -> 5]
 # itens: [ActiveId1 -> 4] - [ActiveLevel1 ->4]
-
-
-# """Cria imagens pra backup"""
-
-# lista_champUrl = []
-# champions = paladins_req.getChampions()
-# for champion in champions:
-#      lista_champUrl.append(champion["ChampionIcon_URL"])
-#      lista_champId.append(champion["id"])
-# index = 0
-# print("iniciando colagem")
-# for url in lista_champUrl:
-#     img = FormaImg(url)
-#     print("Imagem ", index, " Criada")
-#     index += 1
-#     img.save("./champIcons/" + str(lista_champId[index]) + ".png")
-#     print("Imagem ", index, " Salva")
