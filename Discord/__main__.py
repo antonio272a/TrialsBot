@@ -30,7 +30,7 @@ class Comand:
             else:
                 return "Erro: Usuário sem permissão"
         elif self.message_content.split()[0] in self.discord_commands:
-            return self._execute_discord_command(self.message_content.split()[0])
+            return self._execute_discord_command()
         elif (self.message_content.split("-")[0] or self.message_content.split()[0]) in self.api_commands:
             if self.channel_permited:
                 self._set_games()
@@ -93,7 +93,6 @@ class Comand:
     def _execute_discord_command(self):
         if self.message_content.split()[0] == ".help":
             return DiscordCommands().help_command()
-
 
     def _execute_api_command(self):
         if self.command == ".image":

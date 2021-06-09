@@ -39,7 +39,7 @@ class DiscordCommands:
         self.commands = ["help"]
 
     def help_command(self):
-        embed = discord.Embed(title="Central de Ajuda do TrialsBot",
+        embed = Discord.Embed(title="Central de Ajuda do TrialsBot",
                               description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
                                           'comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n '
                                           '.stats-paladins ou .stats-smite')
