@@ -34,7 +34,9 @@ async def on_message(message):  # Ao receber mensagem
             try:
                 await message.channel.send("Comando recebido")
                 retorno = Comand(message)
-                if str(retorno) == "PaladinsFile":
+                if str(retorno) == "help":
+                    await message.channel.send(embed=_help_command())
+                elif str(retorno) == "PaladinsFile":
                     await Comand.send_file(message, "paladins")
                 elif str(retorno) == "PaladinsImage":
                     await Comand.send_image(message, "paladins")
@@ -42,12 +44,25 @@ async def on_message(message):  # Ao receber mensagem
                     await Comand.send_file(message, "smite")
                 elif str(retorno) == "SmiteImage":
                     await Comand.send_image(message, "smite")
-                elif isinstance(retorno, type(discord.Embed())):
-                    await message.channel.send(embed=retorno)
                 else:
                     await message.channel.send(retorno)
             except:
                 await message.channel.send("Ocorreu um erro, favor tentar novamente")
 
+def _help_command():
+    embed = discord.Embed(title="Central de Ajuda do TrialsBot",
+                          description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
+                                      'comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n '
+                                      '.stats-paladins ou .stats-smite')
+    embed.add_field(name=".stats", value="Retorna o arquivo de texto com todos os stats da partida")
+    embed.add_field(name=".id", value="Retorna os Id's de todos os jogadores, com exceção dos perfil privados")
+    embed.add_field(name=".playerid", value="Retorna o Id do nick enviado")
+    embed.add_field(name=".replay",
+                    value="Renorna os players da partida pra conferência, junto com a informação de caso a "
+                          "partida tenha Replay ou não")
+    embed.add_field(name=".image (Pré-alpha)", value="Retorna a imagem dos stats da partida")
+    embed.add_field(name=".winner", value="define o time vencedor para colagem nas imagems (Máx de 3 letras)")
+    embed.add_field(name=".loser", value="define o time perdedor para colagem nas imagems (Máx de 3 letras)")
+    return embed
 # Código para executar o Bot com as configurações pré-definidas
 client.run(token)
