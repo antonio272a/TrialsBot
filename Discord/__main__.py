@@ -1,7 +1,7 @@
 import discord
 from Discord.verify import Verify
 from ApiPaladinsSmite.__main__ import Paladins, Smite
-from Discord.discordcommands import AdminCommands
+from Discord.discordcommands import AdminCommands, DiscordCommands
 
 
 class Comand:
@@ -13,6 +13,7 @@ class Comand:
         self.user_has_acess = Verify.verify_user(self.user_id)
         self.channel_permited = Verify.verify_channel(self.channel_id)
         self.admin_commands = {".addthischannel", ".removethischannel", ".addchannelid", ".removechannelid"}
+        self.discord_commands = {".help"}
         self.api_commands = {".id", ".playerid", ".stats", ".replay", ".image", ".teste"}
         self.retorno = self._main()
 
@@ -28,6 +29,8 @@ class Comand:
                 return self._execute_admin_command()
             else:
                 return "Erro: Usuário sem permissão"
+        elif self.message_content.split()[0] in self.discord_commands:
+            return self._execute_discord_command(self.message_content.split()[0])
         elif (self.message_content.split("-")[0] or self.message_content.split()[0]) in self.api_commands:
             if self.channel_permited:
                 self._set_games()
@@ -58,19 +61,6 @@ class Comand:
         if self.game == "Error":  # Se o jogo não for encontrado na mensagem, ele retorna um aviso pro User e um erro
             return True
 
-    def _execute_api_command(self):
-        if self.command == ".image":
-            self._set_teams()
-            return self.game.get_image(self.message_content.split()[1], self.winner_team, self.loser_team)
-        elif self.command == ".id":
-            return self.game.get_player_id_by_match(self.message_content.split()[1])
-        elif self.command == ".playerid":
-            return self.game.get_player_id_by_name(self.message_content[self.message_content.find(" "):])
-        elif self.command == ".replay":
-            return self.game.get_replay_status(self.message_content.split()[1])
-        elif self.command == ".stats":
-            return self.game.get_stats_file(self.message_content.split()[1])
-
     def _set_teams(self):
         try:
             self.winner_team = self.message_content.split()[2]
@@ -100,11 +90,28 @@ class Comand:
             except:
                 return "Algum erro ocorreu, favor conferir a formatação da mensagem"
 
+    def _execute_discord_command(self):
+        if self.message_content.split()[0] == ".help":
+            return DiscordCommands().help_command()
+
+
+    def _execute_api_command(self):
+        if self.command == ".image":
+            self._set_teams()
+            return self.game.get_image(self.message_content.split()[1], self.winner_team, self.loser_team)
+        elif self.command == ".id":
+            return self.game.get_player_id_by_match(self.message_content.split()[1])
+        elif self.command == ".playerid":
+            return self.game.get_player_id_by_name(self.message_content[self.message_content.find(" "):])
+        elif self.command == ".replay":
+            return self.game.get_replay_status(self.message_content.split()[1])
+        elif self.command == ".stats":
+            return self.game.get_stats_file(self.message_content.split()[1])
+
     @staticmethod
     async def send_image(message, imagem):
         with open("./Images/Createdimages/" + imagem + ".png", 'rb') as file:  # Envia arquivo no discord
             await message.channel.send(file=discord.File(file, "Image.png"))
-
 
     @staticmethod
     async def send_file(message, filename):
