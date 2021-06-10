@@ -60,9 +60,9 @@ def _help_command():
     embed.add_field(name=".replay",
                     value="Renorna os players da partida pra conferência, junto com a informação de caso a "
                           "partida tenha Replay ou não")
-    embed.add_field(name=".image (Pré-alpha)", value="Retorna a imagem dos stats da partida")
-    embed.add_field(name=".winner", value="define o time vencedor para colagem nas imagems (Máx de 3 letras)")
-    embed.add_field(name=".loser", value="define o time perdedor para colagem nas imagems (Máx de 3 letras)")
+    embed.add_field(name=".image", value="Retorna a imagem dos stats da partida. Caso seja paladins, envie os times"
+                                         "junto da mensagem no formato \".image-paladins (id) WIN LOS \", com o "
+                                         "\"WIN\" e \"LOS\" sendo as siglas dos times")
     return embed
 # Código para executar o Bot com as configurações pré-definidas
 client.run(token)
