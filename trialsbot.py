@@ -31,7 +31,7 @@ async def on_message(message):  # Ao receber mensagem
 
     if message.author.id != 838267456296189983:
         if message.content.startswith("."):
-            try:
+            #try:
                 await message.channel.send("Comando recebido")
                 retorno = Comand(message)
                 if str(retorno) == "help":
@@ -46,8 +46,8 @@ async def on_message(message):  # Ao receber mensagem
                     await Comand.send_image(message, "smite")
                 else:
                     await message.channel.send(retorno)
-            except:
-                await message.channel.send("Ocorreu um erro, favor tentar novamente")
+            #except:
+                #await message.channel.send("Ocorreu um erro, favor tentar novamente")
 
 def _help_command():
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
