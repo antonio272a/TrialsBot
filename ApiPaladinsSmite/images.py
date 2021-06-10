@@ -14,7 +14,7 @@ class ImgPaladins:
         self.kda_list = ["Kills_Player", "Deaths", "Assists"]
         self.icons_id_list = self._create_id_list()
         self.stats_list = self._create_stats_list()
-        self.bkg = Image.open("./images/Bases/bkg-paladins.png")
+        self.bkg = Image.open("./Images/Bases/bkg-paladins.png")
         if winner_team and loser_team:
             self.teams_list = ["[" + winner_team + "]", "[" + loser_team + "]"]
         else:
@@ -168,7 +168,7 @@ class ImgSmite:
         self.icons_id_list = self._create_id_list()
         self.stats_list = self._create_stats_list()
         self.nicks_list = self._create_nicks_list()
-        self.bkg = Image.open("./images/Bases/bkg-smite.png")
+        self.bkg = Image.open("./Images/Bases/bkg-smite.png")
         self.create_image()
 
     @staticmethod
