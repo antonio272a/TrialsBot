@@ -22,14 +22,33 @@ client = discord.Client()
 @client.event
 # Comandos
 async def on_ready():  # Quando o bot fica pronto
-    await client.change_presence(activity=discord.Game(name=".help"))
+    await client.change_presence(activity=discord.Game(name=".help"))  # Coloca a atividade do bot
     print("Ready")
 
 
 @client.event
 async def on_message(message):  # Ao receber mensagem
 
-    if message.author.id != 838267456296189983:
+    """
+    PT-BR: Esse arquivo é para a execução do bot de discord e para receber as mensagens.
+    O "try" conferindo o retorno é para os casos que a mensagem para ser enviada de volta sejam arquvios
+    (.png ou .txt) já que não é possível puxar funções assíncronas de dentro de uma classe.
+    Nesses casos a classe retorna uma string específica.
+    Sobre o .help:
+    Não é possível (pelo menos que eu ainda tenha conseguido) retornar um objeto discord.Embed pela classe,
+    então o Embed está sendo criado nesse mesmo arquivo por enquanto.
+
+    EN-US: This file is for running the discord bot and for receiving messages.
+    The "try" checking the return is for cases where the message to be sent back is files
+    (.png or .txt) as it is not possible to pull asynchronous functions from within a class.
+    In these cases the class returns a specific string.
+    About .help:
+    It's not possible (at least I've still managed to) return a discord.Embed object by the class,
+    so Embed is being created in that same file for now.
+    """
+
+
+    if message.author.id != 838267456296189983:  # Confere se a mensagem não é do próprio bot
         if message.content.startswith("."):
             try:
                 await message.channel.send("Comando recebido")

@@ -3,7 +3,9 @@ from Discord.verify import Verify
 
 
 class AdminCommands:
+    """
 
+    """
     def __init__(self, user_id, channel_id):
         self.channel_whitelist = "./Docs/DocsDiscord/Whitelists/channel_whitelist.txt"
         self.user_whitelist = "./Docs/DocsDiscord/Whitelists/user_id_whitelist.txt"
@@ -26,7 +28,7 @@ class AdminCommands:
                 whitelist_doc.close()
             with open(self.channel_whitelist, "w") as whitelist_doc:
                 for line in lines:
-                    if line.strip("\n") != self.channel_id:  # Se a linha for igual à removida, não escreve
+                    if line.strip("\n") != self.channel_id:  # Se a linha for diferente da removida, escreve
                         whitelist_doc.write(line)
             whitelist_doc.close()
             return "Canal removido com sucesso"
