@@ -3,6 +3,16 @@ import urllib
 import urlopen
 import io
 
+"""
+PT-BR: Classes que criam as imagens de stats das partidas usando a biblioteca Pillow.
+Obs.: São muitos detalhes nas colagens sobre espaçamento, então os comentários vão ser colocados em cada linha e
+somente em português, para suporte em inglês, entre em contato com o discord antonio272#3304
+
+EN-US: Classes that create game stat images using Pillow library.
+Note: There are a lot of details on the images pasting about spacing, so the comments will be placed on each line and
+on portuguese only, for support in english, contact discord antonio272#3304
+"""
+
 
 class ImgPaladins:
 
@@ -15,14 +25,12 @@ class ImgPaladins:
         self.icons_id_list = self._create_id_list()
         self.stats_list = self._create_stats_list()
         self.bkg = Image.open("./Images/Bases/bkg-paladins.png")
-        if winner_team and loser_team:
-            self.teams_list = ["[" + winner_team + "]", "[" + loser_team + "]"]
-        else:
-            self.teams_list = [" ", " "]
+        self.teams_list = ["[" + winner_team + "]", "[" + loser_team + "]"]
         self.create_image()
 
     @staticmethod
     def _make_image_1x1(url):
+        # Usa as bibliotecas urllib, urlopen, io e Pillow para retorna a imagem em proporção original
         header = {"User-Agent": "Mozilla/5.0"}
         req = urllib.request.Request(url, None, header)
         url = urllib.request.urlopen(req, timeout=100)
@@ -32,6 +40,7 @@ class ImgPaladins:
 
     @staticmethod
     def _make_image_2x1(url):
+        # Corta a imagem para que ela fique na proporção 2x1, para ficar na proporção certa para resize e colagem
         header = {"User-Agent": "Mozilla/5.0"}
         req = urllib.request.Request(url, None, header)
         url = urllib.request.urlopen(req, timeout=100)
@@ -44,25 +53,25 @@ class ImgPaladins:
         return img
 
     def _get_stat_image(self, stat_id):
-        for champ in self.champions:
-            if champ["id"] == stat_id:
-                url = champ["ChampionIcon_URL"]
-                ischampions = True
+        for champ in self.champions:  # Compara com o Id's dos campeões
+            if champ["id"] == stat_id:  # Se achar
+                url = champ["ChampionIcon_URL"]  # retorna a url do ícone
+                ischampions = True  # Se for Tru
                 try:
-                    img = self._make_image_2x1(url)
+                    img = self._make_image_2x1(url)  # Retorna a imagem em 2x1 para ficar com o tamanho certo
                     return img
                 except:
                     pass
                 break
             else:
                 ischampions = False
-        if not ischampions:
+        if not ischampions:  # Caso não seja campeão, confere nos itens
             for item in self.itens:
-                if item["ItemId"] == stat_id:
-                    url = item["itemIcon_URL"]
+                if item["ItemId"] == stat_id:  # Se achar
+                    url = item["itemIcon_URL"]  # retorna a url da imagem do item
                     break
             try:
-                img = self._make_image_1x1(url)
+                img = self._make_image_1x1(url)  # retorna a imagem em tamanho original
                 return img
             except:
                 pass
@@ -173,6 +182,7 @@ class ImgSmite:
 
     @staticmethod
     def _make_image_1x1(url):
+        # Usa as bibliotecas urllib, urlopen, io e Pillow para retorna a imagem em proporção original
         header = {"User-Agent": "Mozilla/5.0"}
         req = urllib.request.Request(url, None, header)
         url = urllib.request.urlopen(req, timeout=100)
@@ -181,25 +191,25 @@ class ImgSmite:
         return img
 
     def _get_stat_image(self, stat_id):
-        for god in self.gods:
-            if god["id"] == stat_id:
-                url = god["godIcon_URL"]
+        for god in self.gods:  # Compara com os Id's dos gods
+            if god["id"] == stat_id:  # se achar
+                url = god["godIcon_URL"]  # retorna a url do ícone
                 isgod = True
                 try:
-                    img = self._make_image_1x1(url)
+                    img = self._make_image_1x1(url)  # retona a imagem do ícone
                     return img
                 except:
                     pass
                 break
             else:
                 isgod = False
-        if not isgod:
-            for item in self.itens:
-                if item["ItemId"] == stat_id:
-                    url = item["itemIcon_URL"]
+        if not isgod:  # Se não for um god
+            for item in self.itens:  # Compara o Id com os dos itens
+                if item["ItemId"] == stat_id:  # se achar
+                    url = item["itemIcon_URL"]  # Retorna a url da imagem do Item
                     break
             try:
-                img = self._make_image_1x1(url)
+                img = self._make_image_1x1(url)  # Retorna a imagem do ícone
                 return img
             except:
                 pass
@@ -236,9 +246,9 @@ class ImgSmite:
     def _create_nicks_list(self):
         nicks_list = []
         for player in self.match_inf:  # Pra cada jogador
-            if not player["playerName"]:
-                if not player["hz_player_name"]:
-                    player_name = ""
+            if not player["playerName"]:  # Confere se o jogador possui número público
+                if not player["hz_player_name"]:  # Tenta ver se tem conta da Hi-rez vinculada
+                    player_name = ""  # Não conseguindo nenhum dos dois acima, deixa a string vazia
                 else:
                     player_name = player["hz_player_name"]
             else:
@@ -305,24 +315,28 @@ class ImgSmite:
         self._stats_paste()  # Cola os stats e os nomes
         self.bkg.save("./Images/Createdimages/smite.png")  # Salva em um arquivo novo, substituindo o antigo
 
-# def itens_paste(game, stat_id_list, bkg, champions, itens):
-#     # Igonorar por enquanto, função sem uso, necessita criar uma nova imagem e mudar todas as dimensões
-#     if game == "paladins":
-#         collum_count = 0
-#         box = [144, 172]
-#         length = 40
-#         line_count = 0
-#         count = 10
-#         size = (48, 48)
-#         for stat_id in stat_id_list:
-#             if collum_count == count:
-#                 collum_count = 0
-#                 line_count += 1
-#             new_box = [box[0] + length * collum_count, box[1] + 48 * line_count]
-#             try:
-#                 stat_img = pega_stat_img(game, stat_id, champions, itens)
-#                 stat_img = stat_img.resize(size)
-#                 bkg.paste(stat_img, new_box)
-#             except:
-#                 pass
-#             collum_count += 1
+
+"""
+PT-BR: Igonorar por enquanto, função sem uso, necessita criar uma nova imagem e mudar todas as dimensões
+EN-US: Ignore for now, unused function, needs a new image and dimensions changes
+def itens_paste(game, stat_id_list, bkg, champions, itens):
+    if game == "paladins":
+        collum_count = 0
+        box = [144, 172]
+        length = 40
+        line_count = 0
+        count = 10
+        size = (48, 48)
+        for stat_id in stat_id_list:
+            if collum_count == count:
+                collum_count = 0
+                line_count += 1
+            new_box = [box[0] + length * collum_count, box[1] + 48 * line_count]
+            try:
+                stat_img = pega_stat_img(game, stat_id, champions, itens)
+                stat_img = stat_img.resize(size)
+                bkg.paste(stat_img, new_box)
+            except:
+                pass
+            collum_count += 1
+"""

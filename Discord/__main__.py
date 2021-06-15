@@ -81,6 +81,12 @@ class Comand:
             pass
 
     def _get_command(self):
+        """
+        PT-BR: Método criado para verificar se o comando possui a identificação do jogo e para definir qual comando
+        será usado.
+
+        EN-US: Method created to check if the command has the game ID and to define which command will be used.
+        """
         for game_key in self.games:  # Percorre a lista de jogos instanciados acima
             if self.message_content.find(game_key) != -1:  # Se achar o jogo dentro da mensagem
                 self.game = self.games[game_key]  # requisição do jogo guardada dentro da variável game
@@ -92,17 +98,22 @@ class Comand:
         for command in self.api_commands:  # Percorre a lista de comandos
             if self.message_content.find(command) != -1:  # Se achar o comando dentro da mensagem
                 if command == ".image":
-                    self._set_teams() # define os times para colagem
+                    self._set_teams()  # define os times para colagem
                 self.command = command
                 break
         if self.game == "Error":  # Se o jogo não for encontrado na mensagem, ele retorna um erro pro usuário
             return True
 
     def _set_teams(self):
+        """
+        PT-BR: Método usado somente para o comando ".image" para definir os times para a criação da imagem
+
+        EN-US: Method used only for ".image" command to set the teams for the image creation
+        """
         try:  # Tenta extrair os times da mensagem
             self.winner_team = self.message_content.split()[2]
             self.loser_team = self.message_content.split()[3]
-        except: # Caso não consiga, define os padrões
+        except:  # Caso não consiga, define os padrões
             self.winner_team = "WIN"
             self.loser_team = "LOS"
 

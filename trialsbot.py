@@ -17,7 +17,6 @@ token = read_token()
 client = discord.Client()
 
 
-
 # Código quando é enviado uma mensagem ao Bot
 @client.event
 # Comandos
@@ -47,7 +46,6 @@ async def on_message(message):  # Ao receber mensagem
     so Embed is being created in that same file for now.
     """
 
-
     if message.author.id != 838267456296189983:  # Confere se a mensagem não é do próprio bot
         if message.content.startswith("."):
             try:
@@ -68,6 +66,7 @@ async def on_message(message):  # Ao receber mensagem
             except:
                 await message.channel.send("Ocorreu um erro, favor tentar novamente")
 
+
 def _help_command():
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
                           description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
@@ -83,5 +82,7 @@ def _help_command():
                                          "junto da mensagem no formato \".image-paladins (id) WIN LOS \", com o "
                                          "\"WIN\" e \"LOS\" sendo as siglas dos times")
     return embed
+
+
 # Código para executar o Bot com as configurações pré-definidas
 client.run(token)
