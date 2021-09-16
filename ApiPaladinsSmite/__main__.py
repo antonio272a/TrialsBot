@@ -12,7 +12,6 @@ from ApiPaladinsSmite.images import ImgPaladins, ImgSmite
     For more details about the API, access the files "smiteapi.py" or "paladinsapi.py" 
 """
 
-
 class Paladins:
 
     def __init__(self):
@@ -164,8 +163,7 @@ class Smite:
         EN-US: Returns player id even if account is private
         Note: Linked Hirez account nick can be used
         """
-        player_id = self.call.get_player_id_by_name(player_name)
-        return player_id
+        return self.call.get_player_id_by_name(player_name)
 
     def get_replay_status(self, match_id):
         """

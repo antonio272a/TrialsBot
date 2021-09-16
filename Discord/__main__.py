@@ -77,8 +77,6 @@ class Comand:
                     return self.error_message
             else:
                 return "Erro: canal fora da Whitelist"
-        else:
-            pass
 
     def _get_command(self):
         """
@@ -157,7 +155,9 @@ class Comand:
         elif self.command == ".id":
             return self.game.get_player_id_by_match(self.message_content.split()[1])
         elif self.command == ".playerid":
-            return self.game.get_player_id_by_name(self.message_content[self.message_content.find(" "):])
+            retorno = self.game.get_player_id_by_name(self.message_content[self.message_content.find(" "):])
+            print(retorno)
+            return retorno
         elif self.command == ".replay":
             return self.game.get_replay_status(self.message_content.split()[1])
         elif self.command == ".stats":
@@ -183,6 +183,3 @@ class Comand:
     async def send_file(message, filename):
         with open("./Docs/Docs" + filename.capitalize() + "/stats-" + filename + ".txt", 'r') as file:  # Envia arquivo no discord
             await message.channel.send(file=discord.File(file, "stats " + filename + ".txt"))
-
-
-

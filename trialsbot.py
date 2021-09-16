@@ -1,5 +1,4 @@
 import discord
-import pyrez
 from Discord.__main__ import Comand
 
 
@@ -68,10 +67,12 @@ async def on_message(message):  # Ao receber mensagem
 
 
 def _help_command():
+
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
                           description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
                                       'comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n '
-                                      '.stats-paladins ou .stats-smite')
+                                      '.stats-paladins ou .stats-smite',
+                          colour=16711680)
     embed.add_field(name=".stats", value="Retorna o arquivo de texto com todos os stats da partida")
     embed.add_field(name=".id", value="Retorna os Id's de todos os jogadores, com exceção dos perfil privados")
     embed.add_field(name=".playerid", value="Retorna o Id do nick enviado")

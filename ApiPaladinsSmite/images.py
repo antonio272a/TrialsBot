@@ -302,7 +302,7 @@ class ImgSmite:
                 collum_count += 1  # Passa pra póxima coluna
                 line_count = 0  # Reseta a contagem de linhas
                 if collum_count == 5:  # Quando chegar no primeiro player do próximo time
-                    start_box[0] += 62  # Colcoa a distância entre os times
+                    start_box[0] += 62  # Calcula a distância entre os times
             box = [start_box[0] + length * collum_count, start_box[1] + height * line_count]
             # reference: https://pillow.readthedocs.io/en/stable/handbook/text-anchors.html
             # Cria o box de colagem
