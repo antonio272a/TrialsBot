@@ -33,7 +33,8 @@ class PaladinsApi:
         return self._paladins_req.getMatch(match_id)
 
     def get_player_id_by_name(self, player_name):
-        return self._paladins_req.getPlayerId(player_name)['Name']
+        player = self._paladins_req.getPlayerId(player_name)[0]
+        return f"Nick: {player['Name']} - Id: {player['player_id']}  "
 
     def get_champions(self):
         champions = self._paladins_req.getChampions()
