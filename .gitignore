@@ -3,3 +3,4 @@ Docs/ApiTokens/hirezApiToken.txt
 venv
 .idea
 __pycache
+*.log
