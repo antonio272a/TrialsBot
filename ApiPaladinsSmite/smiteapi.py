@@ -20,8 +20,13 @@ class SmiteApi:
 
     def __init__(self):
         self._dev_id_hirez = "3656"
-        self._auth_key_hirez = "310114B6E36447369BBD3F35034995AC"
+        self._auth_key_hirez = self._get_hirez_auth_key()
         self._smite_req = pyrez.SmiteAPI(devId=self._dev_id_hirez, authKey=self._auth_key_hirez)
+
+    @staticmethod
+    def _get_hirez_auth_key():
+        with open('./Docs/ApiTokens/hirezApiToken', 'r') as f:
+            return f.readline()
 
     def get_match_inf(self, match_id):
         return self._smite_req.getMatch(match_id)

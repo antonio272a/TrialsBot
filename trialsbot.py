@@ -1,6 +1,7 @@
 import discord
 from Discord.__main__ import Comand
-
+import json
+from datetime import datetime
 
 # Código para resgatar o token do Bot
 def read_token():
@@ -13,7 +14,8 @@ def read_token():
 token = read_token()
 
 # Subindo o Bot no discord
-client = discord.Client()
+intents = discord.Intents.all()
+client = discord.Client(intents=intents)
 
 
 # Código quando é enviado uma mensagem ao Bot
@@ -22,7 +24,10 @@ client = discord.Client()
 async def on_ready():  # Quando o bot fica pronto
     await client.change_presence(activity=discord.Game(name=".help"))  # Coloca a atividade do bot
     print("Ready")
+    print(datetime.now().strftime("%H:%M"))
 
+def teste():
+    print('teste')
 
 @client.event
 async def on_message(message):  # Ao receber mensagem
@@ -47,7 +52,7 @@ async def on_message(message):  # Ao receber mensagem
 
     if message.author.id != 838267456296189983:  # Confere se a mensagem não é do próprio bot
         if message.content.startswith("."):
-            try:
+            # try:
                 await message.channel.send("Comando recebido")
                 retorno = Comand(message)
                 if str(retorno) == "help":
@@ -60,14 +65,35 @@ async def on_message(message):  # Ao receber mensagem
                     await Comand.send_file(message, "smite")
                 elif str(retorno) == "SmiteImage":
                     await Comand.send_image(message, "smite")
+                elif str(retorno) == 'Brackets':
+                    await send_message_to_f_a()
                 else:
                     await message.channel.send(retorno)
-            except:
-                await message.channel.send("Ocorreu um erro, favor tentar novamente")
+            # except:
+            #     await message.channel.send("Ocorreu um erro, favor tentar novamente")
+
+
+async def send_message_to_f_a():
+    with open('./Docs/DocsBattlefy/free-agents-discord.json', 'r') as f:
+        data = json.load(f)
+        agents_list = json.loads(data)
+    for player in agents_list:
+        username, team = player
+        name, discriminator = username.split('#')
+        user_id = await get_member(name, discriminator)
+        user = await client.fetch_user(user_id)
+        await user.send(f"Boa tarde <@{user_id}>, hoje no camepeonato da Trials, você jogará no time {team}")
+
+
+async def get_member(name, discriminator):
+    members = client.get_all_members()
+    for member in members:
+        if (member.discriminator == discriminator) and (member.name.upper() == name.upper()):
+            return member.id
+
 
 
 def _help_command():
-
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
                           description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
                                       'comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n '

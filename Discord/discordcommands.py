@@ -1,6 +1,7 @@
-import discord
 from Discord.verify import Verify
 from Utils.iterator import LineRemove
+from ApiBattlefy.__main__ import BattlefyAPI
+import json
 
 
 class AdminCommands:
@@ -35,7 +36,7 @@ class AdminCommands:
         else:
             return "Canal já presente na whitelist"
 
-    def remove_channel_from_whitelis(self):
+    def remove_channel_from_whitelist(self):
         """
         PT-BR: Confere se o canal está listado, caso esteja, utiliza a classe LineRemove (criada para evitar problemas
         de MemoryError) para excluir somente o canal desejado, maiores detalhes sobre a classe no arquivo iterator.py
@@ -70,3 +71,27 @@ class DiscordCommands:
 
     def help_command(self):
         return "help"
+
+
+class BattlefyCommands:
+    def __init__(self, command, tournament_id):
+        self.command = command
+        self.tournament_id = tournament_id
+        self._api = BattlefyAPI()
+
+    def check_command(self):
+        if self.command == ".registrations":
+            return self.on_registrations_close()
+        elif self.command == ".brackets":
+            return self.on_brackets_release()
+
+    def on_registrations_close(self):
+        self._api.save_tournament_participants(self.tournament_id)
+        return 'Informação dos agentes livres salva com sucesso'
+
+    def on_brackets_release(self):
+        free_agents_discord = self._api.get_free_agents_discord(self.tournament_id)
+        with open('./Docs/DocsBattlefy/free-agents-discord.json', 'w') as f:
+            data = json.dumps(free_agents_discord)
+            json.dump(data, f)
+        return 'Brackets'

@@ -1,7 +1,7 @@
 import discord
 from Discord.verify import Verify
 from ApiPaladinsSmite.__main__ import Paladins, Smite
-from Discord.discordcommands import AdminCommands, DiscordCommands
+from Discord.discordcommands import AdminCommands, DiscordCommands, BattlefyCommands
 
 
 class Comand:
@@ -31,7 +31,8 @@ class Comand:
         self.admin_commands = {".addthischannel", ".removethischannel", ".addchannelid", ".removechannelid"}
         self.discord_commands = {".help"}
         self.games = {"smite": Smite(), "paladins": Paladins()}
-        self.api_commands = {".id", ".playerid", ".stats", ".replay", ".image", ".teste"}
+        self.game_api_commands = {".id", ".playerid", ".stats", ".replay", ".image", ".teste"}
+        self.battlefy_api_commands = {".registrations", ".brackets"}
         self.retorno = self._main()
 
     def __str__(self):
@@ -62,7 +63,7 @@ class Comand:
                 return "Erro: Usuário sem permissão"
         elif self.message_content.split()[0] in self.discord_commands:
             return self._execute_discord_command()
-        elif (self.message_content.split("-")[0] or self.message_content.split()[0]) in self.api_commands:
+        elif (self.message_content.split("-")[0] or self.message_content.split()[0]) in self.game_api_commands:
             if self.channel_permited:
                 if not self._get_command():
                     """
@@ -77,6 +78,8 @@ class Comand:
                     return self.error_message
             else:
                 return "Erro: canal fora da Whitelist"
+        elif self.message_content.split()[0] in self.battlefy_api_commands:
+            return self._execute_battlefy_commands()
 
     def _get_command(self):
         """
@@ -93,7 +96,7 @@ class Comand:
                 self.game = "Error"  # Se não achar o jogo no comando, a variável fica com Str Error
                 self.error_message = "Erro: " \
                                      "Comando incorreto, o comando sempre deve ser acompanhado pelo jogo, detalhes em .help"
-        for command in self.api_commands:  # Percorre a lista de comandos
+        for command in self.game_api_commands:  # Percorre a lista de comandos
             if self.message_content.find(command) != -1:  # Se achar o comando dentro da mensagem
                 if command == ".image":
                     self._set_teams()  # define os times para colagem
@@ -126,7 +129,7 @@ class Comand:
         if self.command == ".addthischannel":
             return AdminCommands(self.user_id, self.channel_id).add_channel_to_whitelist()
         elif self.command == ".removethischannel":
-            return AdminCommands(self.user_id, self.channel_id).remove_channel_from_whitelis()
+            return AdminCommands(self.user_id, self.channel_id).remove_channel_from_whitelist()
         elif self.command == ".addchannelid":
             try:
                 channel_id = self.message_content.split()[1]
@@ -136,7 +139,7 @@ class Comand:
         elif self.command == ".removechannelid":
             try:
                 channel_id = self.message_content.split()[1]
-                return AdminCommands(self.user_id, channel_id).remove_channel_from_whitelis()
+                return AdminCommands(self.user_id, channel_id).remove_channel_from_whitelist()
             except:
                 return "Algum erro ocorreu, favor conferir a formatação da mensagem"
 
@@ -154,7 +157,7 @@ class Comand:
             return self.game.get_image(self.message_content.split()[1], self.winner_team, self.loser_team)
         elif self.command == ".id":
             return self.game.get_player_id_by_match(self.message_content.split()[1])
-        elif self.command == ".playerid":
+        elif self.command == ".playerid":  # Não funcionando
             retorno = self.game.get_player_id_by_name(self.message_content[self.message_content.find(" "):])
             print(retorno)
             return retorno
@@ -162,6 +165,12 @@ class Comand:
             return self.game.get_replay_status(self.message_content.split()[1])
         elif self.command == ".stats":
             return self.game.get_stats_file(self.message_content.split()[1])
+
+    def _execute_battlefy_commands(self):
+        command = self.message_content.split()[0]
+        tournament_id = self.message_content.split()[1]
+        retorno = BattlefyCommands(command, tournament_id).check_command()
+        return retorno
 
     """
     PT-BR: Os métodos estáticos abaixo são para envio de arquivos (.png ou .txt) no discord, estão aqui só 
