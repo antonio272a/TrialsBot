@@ -159,7 +159,6 @@ class Comand:
             return self.game.get_player_id_by_match(self.message_content.split()[1])
         elif self.command == ".playerid":  # Não funcionando
             retorno = self.game.get_player_id_by_name(self.message_content.split()[1])
-            print(retorno)
             return retorno
         elif self.command == ".replay":
             return self.game.get_replay_status(self.message_content.split()[1])
