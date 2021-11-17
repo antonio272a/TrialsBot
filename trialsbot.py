@@ -52,7 +52,7 @@ async def on_message(message):  # Ao receber mensagem
 
     if message.author.id != 838267456296189983:  # Confere se a mensagem não é do próprio bot
         if message.content.startswith("."):
-            # try:
+            try:
                 await message.channel.send("Comando recebido")
                 retorno = Comand(message)
                 if str(retorno) == "help":
@@ -69,8 +69,8 @@ async def on_message(message):  # Ao receber mensagem
                     await send_message_to_f_a()
                 else:
                     await message.channel.send(retorno)
-            # except:
-            #     await message.channel.send("Ocorreu um erro, favor tentar novamente")
+            except:
+                await message.channel.send("Ocorreu um erro, favor tentar novamente")
 
 
 async def send_message_to_f_a():
