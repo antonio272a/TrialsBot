@@ -1,4 +1,4 @@
-*.txt
+Docs/DocsDiscord/token.txt
 venv
 .idea
 __pycache
