@@ -1,7 +1,8 @@
 import discord
+from discord.ext import commands
 from Discord.__main__ import Comand
 import json
-from datetime import datetime
+
 
 # Código para resgatar o token do Bot
 def read_token():
@@ -15,19 +16,14 @@ token = read_token()
 
 # Subindo o Bot no discord
 intents = discord.Intents.all()
-client = discord.Client(intents=intents)
+client = commands.Bot(intents=intents, command_prefix='.')
 
 
-# Código quando é enviado uma mensagem ao Bot
 @client.event
-# Comandos
-async def on_ready():  # Quando o bot fica pronto
+async def on_ready():
     await client.change_presence(activity=discord.Game(name=".help"))  # Coloca a atividade do bot
     print("Ready")
-    print(datetime.now().strftime("%H:%M"))
 
-def teste():
-    print('teste')
 
 @client.event
 async def on_message(message):  # Ao receber mensagem
