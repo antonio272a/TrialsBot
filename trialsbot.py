@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
-from Discord.__main__ import Comand
-import json
+from Discord.discordcommands import *
+from ApiBattlefy.battlefycommands import *
 
 
 # Código para resgatar o token do Bot
@@ -25,69 +25,39 @@ async def on_ready():
     print("Ready")
 
 
-@client.event
-async def on_message(message):  # Ao receber mensagem
-
-    """
-    PT-BR: Esse arquivo é para a execução do bot de discord e para receber as mensagens.
-    O "try" conferindo o retorno é para os casos que a mensagem para ser enviada de volta sejam arquvios
-    (.png ou .txt) já que não é possível puxar funções assíncronas de dentro de uma classe.
-    Nesses casos a classe retorna uma string específica.
-    Sobre o .help:
-    Não é possível (pelo menos que eu ainda tenha conseguido) retornar um objeto discord.Embed pela classe,
-    então o Embed está sendo criado nesse mesmo arquivo por enquanto.
-
-    EN-US: This file is for running the discord bot and for receiving messages.
-    The "try" checking the return is for cases where the message to be sent back is files
-    (.png or .txt) as it is not possible to pull asynchronous functions from within a class.
-    In these cases the class returns a specific string.
-    About .help:
-    It's not possible (at least I've still managed to) return a discord.Embed object by the class,
-    so Embed is being created in that same file for now.
-    """
-
-    if message.author.id != 838267456296189983:  # Confere se a mensagem não é do próprio bot
-        if message.content.startswith("."):
-            try:
-                await message.channel.send("Comando recebido")
-                retorno = Comand(message)
-                if str(retorno) == "help":
-                    await message.channel.send(embed=_help_command())
-                elif str(retorno) == "PaladinsFile":
-                    await Comand.send_file(message, "paladins")
-                elif str(retorno) == "PaladinsImage":
-                    await Comand.send_image(message, "paladins")
-                elif str(retorno) == "SmiteFile":
-                    await Comand.send_file(message, "smite")
-                elif str(retorno) == "SmiteImage":
-                    await Comand.send_image(message, "smite")
-                elif str(retorno) == 'Brackets':
-                    await send_message_to_f_a()
-                else:
-                    await message.channel.send(retorno)
-            except:
-                await message.channel.send("Ocorreu um erro, favor tentar novamente")
+@client.command(pass_context=True)
+async def admin(ctx, command, param=""):
+    admin_commands = {
+        'addthischannel': add_channel_to_whitelist,
+        'removethischannel': remove_channel_from_whitelist,
+        'removechannelid': remove_channel_from_whitelist,
+        'addchannelid': add_channel_to_whitelist
+    }
+    channel_id = param or ctx.channel.id
+    try:
+        result = admin_commands[command](channel_id)
+        await ctx.send(result)
+    except:
+        await ctx.send('Algum erro ocorreu, favor converir a formatação da mensagem')
 
 
-async def send_message_to_f_a():
-    with open('./Docs/DocsBattlefy/free-agents-discord.json', 'r') as f:
-        data = json.load(f)
-        agents_list = json.loads(data)
-    for player in agents_list:
-        username, team = player
-        name, discriminator = username.split('#')
-        user_id = await get_member(name, discriminator)
-        user = await client.fetch_user(user_id)
-        await user.send(f"Boa tarde <@{user_id}>, hoje no camepeonato da Trials, você jogará no time {team}")
+@client.command(pass_context=True)
+async def battlefy(ctx, command, tournament_id):
+    batltefy_commands = {
+        'closed': on_registrations_close,
+        'release': on_brackets_release
+        }
+    message = batltefy_commands[command](tournament_id)
+    if message:
+        await ctx.send(message)
+    else:
+        await send_message_to_f_a(ctx, client)
+        await ctx.send('mensagens enviadas')
 
 
-async def get_member(name, discriminator):
-    members = client.get_all_members()
-    for member in members:
-        if (member.discriminator == discriminator) and (member.name.upper() == name.upper()):
-            return member.id
-
-
+@client.command(pass_context=True)
+async def paladins(ctx, command, param=""):
+    pass
 
 def _help_command():
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
