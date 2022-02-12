@@ -5,7 +5,7 @@ channel_whitelist = "./Docs/DocsDiscord/Whitelists/channel_whitelist.txt"
 user_whitelist = "./Docs/DocsDiscord/Whitelists/user_id_whitelist.txt"
 
 
-def add_channel_to_whitelist(channel_id):
+async def add_channel_to_whitelist(ctx, channel_id):
     """
     PT-BR: Confere se o canal está listado, caso não esteja, abre o arquivo como modo "a" e adicona o canal
     e uma quebra de linha.
@@ -17,12 +17,12 @@ def add_channel_to_whitelist(channel_id):
     if not channel_whitelisted:
         with open(channel_whitelist, "a") as whitelist_doc:
             whitelist_doc.write(str(channel_id) + "\n")
-        return "Canal adicionado com sucesso"
+        await ctx.send("Canal adicionado com sucesso")
     else:
-        return "Canal já presente na whitelist"
+        await ctx.send("Canal já presente na whitelist")
 
 
-def remove_channel_from_whitelist(channel_id):
+async def remove_channel_from_whitelist(ctx, channel_id):
     """
     PT-BR: Confere se o canal está listado, caso esteja, utiliza a classe LineRemove (criada para evitar problemas
     de MemoryError) para excluir somente o canal desejado, maiores detalhes sobre a classe no arquivo iterator.py
@@ -37,6 +37,6 @@ def remove_channel_from_whitelist(channel_id):
                 if channel:
                     whitelist_doc.write(channel)
         whitelist_doc.close()
-        return "Canal removido com sucesso"
+        await ctx.send("Canal removido com sucesso")
     else:
-        return "Canal não presente na Whitelist"
+        await ctx.send("Canal não presente na Whitelist")

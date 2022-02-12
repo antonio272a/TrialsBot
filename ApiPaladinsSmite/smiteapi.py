@@ -116,7 +116,7 @@ async def get_stats_file(ctx, match_id, *args, **kwargs):
             for stat in player:  # Pra cada info dentro dos players
                 log.write('\n' + str(stat) + ' - ' + str(player[stat]))  # escreve info no doc
     log.close()
-    with open("./Docs/Docs/DocsHirez/stats-smite.txt", 'r') as file:  # Envia arquivo no discord
+    with open("./Docs/DocsHirez/stats-smite.txt", 'r') as file:  # Envia arquivo no discord
         await ctx.send(file=discord.File(file, "stats smite.txt"))
 
 

@@ -112,7 +112,7 @@ async def get_stats_file(ctx, match_id, *_args):
             for stat in player:  # Pra cada info dentro dos players
                 log.write('\n' + str(stat) + ' - ' + str(player[stat]))  # escreve info no doc
     log.close()
-    with open("./Docs/Docs/DocsHirez/stats-paladins.txt", 'r') as file:  # Envia arquivo no discord
+    with open("./Docs/DocsHirez/stats-paladins.txt", 'r') as file:  # Envia arquivo no discord
         await ctx.send(file=discord.File(file, "stats paladins.txt"))
 
 

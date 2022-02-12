@@ -2,16 +2,17 @@ from ApiBattlefy.__main__ import *
 import json
 
 
-def on_registrations_close(tournament_id):
+async def on_registrations_close(ctx, tournament_id):
     save_tournament_participants(tournament_id)
-    return 'Informação dos agentes livres salva com sucesso'
+    await ctx.send('Informação dos agentes livres salva com sucesso')
 
 
-def on_brackets_release(tournament_id):
+async def on_brackets_release(ctx, client, tournament_id):
     free_agents_discord = get_free_agents_discord(tournament_id)
     with open('./Docs/DocsBattlefy/free-agents-discord.json', 'w') as f:
         data = json.dumps(free_agents_discord)
         json.dump(data, f)
+    await send_message_to_f_a(ctx, client)
 
 
 async def get_member(client, name, discriminator):
@@ -34,3 +35,4 @@ async def send_message_to_f_a(ctx, client):
             await user.send(f"Boa tarde <@{user_id}>, hoje no camepeonato da Trials, você jogará no time {team}")
         except:
             await ctx.send(f'erro ao encontrar o jogador **{username}** do time **{team}**')
+    await ctx.send('mensagens enviadas')

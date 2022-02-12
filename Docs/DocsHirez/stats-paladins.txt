@@ -1,0 +1,1231 @@
+
+
+************************************
+
+Account_Level - 942
+ActiveId1 - 11723
+ActiveId2 - 13229
+ActiveId3 - 0
+ActiveId4 - 0
+ActiveLevel1 - 2
+ActiveLevel2 - 1
+ActiveLevel3 - 0
+ActiveLevel4 - 0
+ActivePlayerId - 714741077
+Assists - 29
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2533
+Damage_Bot - 0
+Damage_Done_In_Hand - 15701
+Damage_Done_Magical - 0
+Damage_Done_Physical - 17242
+Damage_Mitigated - 0
+Damage_Player - 17242
+Damage_Taken - 21883
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 21883
+Deaths - 4
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 3825
+Gold_Per_Minute - 298
+Healing - 156400
+Healing_Bot - 0
+Healing_Player_Self - 7830
+ItemId1 - 25381
+ItemId2 - 25379
+ItemId3 - 25376
+ItemId4 - 25383
+ItemId5 - 25380
+ItemId6 - 25366
+ItemLevel1 - 3
+ItemLevel2 - 1
+ItemLevel3 - 1
+ItemLevel4 - 5
+ItemLevel5 - 5
+ItemLevel6 - 0
+Item_Active_1 - Chronos
+Item_Active_2 - Haven
+Item_Active_3 - 
+Item_Active_4 - 
+Item_Purch_1 - Grand Design
+Item_Purch_2 - Abyssal Effluxion
+Item_Purch_3 - The Price of Salvation
+Item_Purch_4 - Crushing Expectations
+Item_Purch_5 - Shadow Tribunal
+Item_Purch_6 - Spreading Influence
+Killing_Spree - 17
+Kills_Bot - 0
+Kills_Double - 0
+Kills_Fire_Giant - 2
+Kills_First_Blood - 0
+Kills_Gold_Fury - 2
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 2
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 124
+League_Points - 63
+League_Tier - 24
+League_Wins - 143
+Map_Game - Ranked Frog Isle
+Mastery_Level - 51
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - None
+Minutes - 12
+Multi_kill_Max - 1
+Objective_Assists - 40
+PartyId - 319533
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Corvus
+Region - Brazil
+Skin - Golden Corvus
+SkinId - 25490
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 1
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Winner
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 714741077
+playerName - Sora々
+playerPortalId - 5
+playerPortalUserId - 76561198394698013
+ret_msg - None
+
+************************************
+
+Account_Level - 238
+ActiveId1 - 13229
+ActiveId2 - 11826
+ActiveId3 - 13071
+ActiveId4 - 0
+ActiveLevel1 - 1
+ActiveLevel2 - 0
+ActiveLevel3 - 2
+ActiveLevel4 - 0
+ActivePlayerId - 11757776
+Assists - 15
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2092
+Damage_Bot - 0
+Damage_Done_In_Hand - 97697
+Damage_Done_Magical - 0
+Damage_Done_Physical - 119599
+Damage_Mitigated - 0
+Damage_Player - 119599
+Damage_Taken - 55837
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 55837
+Deaths - 7
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 3740
+Gold_Per_Minute - 291
+Healing - 0
+Healing_Bot - 0
+Healing_Player_Self - 1961
+ItemId1 - 12342
+ItemId2 - 12792
+ItemId3 - 14687
+ItemId4 - 12517
+ItemId5 - 12213
+ItemId6 - 16382
+ItemLevel1 - 4
+ItemLevel2 - 1
+ItemLevel3 - 2
+ItemLevel4 - 4
+ItemLevel5 - 4
+ItemLevel6 - 0
+Item_Active_1 - Haven
+Item_Active_2 - Nimble
+Item_Active_3 - Wrecker
+Item_Active_4 - 
+Item_Purch_1 - Tumble
+Item_Purch_2 - Drain Life
+Item_Purch_3 - Somersault
+Item_Purch_4 - Megaton
+Item_Purch_5 - Blast Shower
+Item_Purch_6 - Impulse
+Killing_Spree - 9
+Kills_Bot - 2
+Kills_Double - 0
+Kills_Fire_Giant - 2
+Kills_First_Blood - 0
+Kills_Gold_Fury - 2
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 13
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 37
+League_Points - 62
+League_Tier - 23
+League_Wins - 49
+Map_Game - Ranked Frog Isle
+Mastery_Level - 42
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - [{'merge_datetime': 'Mar 16 2020  1:16AM', 'playerId': '717481197', 'portalId': '25'}, {'merge_datetime': 'Apr  4 2021 12:22AM', 'playerId': '724881536', 'portalId': '5'}, {'merge_datetime': 'May 17 2021  8:44PM', 'playerId': '725572332', 'portalId': '28'}]
+Minutes - 12
+Multi_kill_Max - 1
+Objective_Assists - 30
+PartyId - 362270
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Cassie
+Region - Brazil
+Skin - Coral
+SkinId - 15951
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 1
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Winner
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 11757776
+playerName - i39100F
+playerPortalId - 5
+playerPortalUserId - 76561199158398432
+ret_msg - None
+
+************************************
+
+Account_Level - 201
+ActiveId1 - 13224
+ActiveId2 - 12010
+ActiveId3 - 13229
+ActiveId4 - 0
+ActiveLevel1 - 2
+ActiveLevel2 - 1
+ActiveLevel3 - 1
+ActiveLevel4 - 0
+ActivePlayerId - 6051178
+Assists - 10
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2493
+Damage_Bot - 0
+Damage_Done_In_Hand - 53758
+Damage_Done_Magical - 0
+Damage_Done_Physical - 80347
+Damage_Mitigated - 0
+Damage_Player - 80347
+Damage_Taken - 52089
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 52089
+Deaths - 11
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 3477
+Gold_Per_Minute - 271
+Healing - 0
+Healing_Bot - 0
+Healing_Player_Self - 4897
+ItemId1 - 23469
+ItemId2 - 23472
+ItemId3 - 23479
+ItemId4 - 23539
+ItemId5 - 23471
+ItemId6 - 23482
+ItemLevel1 - 5
+ItemLevel2 - 1
+ItemLevel3 - 1
+ItemLevel4 - 3
+ItemLevel5 - 5
+ItemLevel6 - 0
+Item_Active_1 - Veteran
+Item_Active_2 - Life Rip
+Item_Active_3 - Haven
+Item_Active_4 - 
+Item_Purch_1 - Criminal Record
+Item_Purch_2 - Raw Talent
+Item_Purch_3 - Trespasser
+Item_Purch_4 - Guild Tactics
+Item_Purch_5 - Swift Hands
+Item_Purch_6 - Dragon Fangs
+Killing_Spree - 8
+Kills_Bot - 0
+Kills_Double - 0
+Kills_Fire_Giant - 2
+Kills_First_Blood - 0
+Kills_Gold_Fury - 2
+Kills_Penta - 0
+Kills_Phoenix - 23461
+Kills_Player - 16
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 52
+League_Points - 0
+League_Tier - 26
+League_Wins - 64
+Map_Game - Ranked Frog Isle
+Mastery_Level - 48
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - [{'merge_datetime': 'Dec  8 2021  1:20AM', 'playerId': '728157181', 'portalId': '5'}]
+Minutes - 12
+Multi_kill_Max - 2
+Objective_Assists - 30
+PartyId - 319533
+Platform - Epic Games
+Rank_Stat_League - 0
+Reference_Name - Koga
+Region - Brazil
+Skin - Exile
+SkinId - 23476
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 1
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Winner
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 6051178
+playerName - NEZUKØ
+playerPortalId - 28
+playerPortalUserId - 23371
+ret_msg - None
+
+************************************
+
+Account_Level - 175
+ActiveId1 - 14633
+ActiveId2 - 11646
+ActiveId3 - 13229
+ActiveId4 - 0
+ActiveLevel1 - 2
+ActiveLevel2 - 1
+ActiveLevel3 - 1
+ActiveLevel4 - 0
+ActivePlayerId - 0
+Assists - 7
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2073
+Damage_Bot - 0
+Damage_Done_In_Hand - 55240
+Damage_Done_Magical - 0
+Damage_Done_Physical - 55240
+Damage_Mitigated - 56063
+Damage_Player - 55240
+Damage_Taken - 76013
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 76013
+Deaths - 6
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 3333
+Gold_Per_Minute - 260
+Healing - 0
+Healing_Bot - 0
+Healing_Player_Self - 862
+ItemId1 - 12942
+ItemId2 - 14856
+ItemId3 - 14814
+ItemId4 - 11916
+ItemId5 - 12316
+ItemId6 - 16397
+ItemLevel1 - 3
+ItemLevel2 - 4
+ItemLevel3 - 4
+ItemLevel4 - 3
+ItemLevel5 - 1
+ItemLevel6 - 0
+Item_Active_1 - Rejuvenate
+Item_Active_2 - Master Riding
+Item_Active_3 - Haven
+Item_Active_4 - 
+Item_Purch_1 - Bowling Ball
+Item_Purch_2 - Brave and Bold
+Item_Purch_3 - One Man's Scrap
+Item_Purch_4 - Failsafe
+Item_Purch_5 - Fuel Efficiency
+Item_Purch_6 - Fortify
+Killing_Spree - 8
+Kills_Bot - 0
+Kills_Double - 0
+Kills_Fire_Giant - 2
+Kills_First_Blood - 0
+Kills_Gold_Fury - 2
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 6
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 67
+League_Points - 67
+League_Tier - 18
+League_Wins - 57
+Map_Game - Ranked Frog Isle
+Mastery_Level - 49
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - None
+Minutes - 12
+Multi_kill_Max - 1
+Objective_Assists - 229
+PartyId - 352000
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Barik
+Region - Brazil
+Skin - Team Fortress 2
+SkinId - 14870
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 1
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Winner
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 0
+playerName - 
+playerPortalId - None
+playerPortalUserId - None
+ret_msg - None
+
+************************************
+
+Account_Level - 999
+ActiveId1 - 13229
+ActiveId2 - 0
+ActiveId3 - 0
+ActiveId4 - 0
+ActiveLevel1 - 2
+ActiveLevel2 - 0
+ActiveLevel3 - 0
+ActiveLevel4 - 0
+ActivePlayerId - 1814395
+Assists - 16
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2512
+Damage_Bot - 0
+Damage_Done_In_Hand - 55386
+Damage_Done_Magical - 0
+Damage_Done_Physical - 55386
+Damage_Mitigated - 0
+Damage_Player - 55386
+Damage_Taken - 91739
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 91739
+Deaths - 6
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 2888
+Gold_Per_Minute - 225
+Healing - 0
+Healing_Bot - 0
+Healing_Player_Self - 14382
+ItemId1 - 24506
+ItemId2 - 24499
+ItemId3 - 24314
+ItemId4 - 24309
+ItemId5 - 24307
+ItemId6 - 24477
+ItemLevel1 - 3
+ItemLevel2 - 1
+ItemLevel3 - 1
+ItemLevel4 - 5
+ItemLevel5 - 5
+ItemLevel6 - 0
+Item_Active_1 - Haven
+Item_Active_2 - 
+Item_Active_3 - 
+Item_Active_4 - 
+Item_Purch_1 - Beyond The Veil
+Item_Purch_2 - Hell Hunter
+Item_Purch_3 - Continuum Shift
+Item_Purch_4 - Lost Legacy
+Item_Purch_5 - Old Wounds
+Item_Purch_6 - Deja vu
+Killing_Spree - 7
+Kills_Bot - 1
+Kills_Double - 0
+Kills_Fire_Giant - 2
+Kills_First_Blood - 0
+Kills_Gold_Fury - 2
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 2
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 35
+League_Points - 14
+League_Tier - 22
+League_Wins - 41
+Map_Game - Ranked Frog Isle
+Mastery_Level - 53
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - None
+Minutes - 12
+Multi_kill_Max - 1
+Objective_Assists - 109
+PartyId - 352000
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Atlas
+Region - Brazil
+Skin - Legionnaire
+SkinId - 24369
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 1
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Winner
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 1814395
+playerName - HolamellamoLuis
+playerPortalId - 5
+playerPortalUserId - 76561198324457021
+ret_msg - None
+
+************************************
+
+Account_Level - 979
+ActiveId1 - 13229
+ActiveId2 - 11826
+ActiveId3 - 13165
+ActiveId4 - 0
+ActiveLevel1 - 2
+ActiveLevel2 - 2
+ActiveLevel3 - 0
+ActiveLevel4 - 0
+ActivePlayerId - 700434448
+Assists - 20
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2372
+Damage_Bot - 0
+Damage_Done_In_Hand - 19424
+Damage_Done_Magical - 0
+Damage_Done_Physical - 19921
+Damage_Mitigated - 0
+Damage_Player - 19921
+Damage_Taken - 18316
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 18316
+Deaths - 4
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 3231
+Gold_Per_Minute - 252
+Healing - 131635
+Healing_Bot - 0
+Healing_Player_Self - 7927
+ItemId1 - 16830
+ItemId2 - 16857
+ItemId3 - 16853
+ItemId4 - 16826
+ItemId5 - 16881
+ItemId6 - 16609
+ItemLevel1 - 5
+ItemLevel2 - 1
+ItemLevel3 - 1
+ItemLevel4 - 3
+ItemLevel5 - 5
+ItemLevel6 - 0
+Item_Active_1 - Haven
+Item_Active_2 - Nimble
+Item_Active_3 - Morale Boost
+Item_Active_4 - 
+Item_Purch_1 - Veil
+Item_Purch_2 - Soul Forge
+Item_Purch_3 - Blood Pact
+Item_Purch_4 - Nether Siphon
+Item_Purch_5 - Fade to Black
+Item_Purch_6 - Mortal Reach
+Killing_Spree - 13
+Kills_Bot - 0
+Kills_Double - 0
+Kills_Fire_Giant - 1
+Kills_First_Blood - 0
+Kills_Gold_Fury - 1
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 4
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 3
+League_Points - 0
+League_Tier - 17
+League_Wins - 2
+Map_Game - Ranked Frog Isle
+Mastery_Level - 53
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - [{'merge_datetime': 'Apr 13 2019  2:23AM', 'playerId': '6565268', 'portalId': '1'}]
+Minutes - 12
+Multi_kill_Max - 1
+Objective_Assists - 78
+PartyId - 270954
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Seris
+Region - Brazil
+Skin - Stellar Mender (Magenta)
+SkinId - 26403
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 2
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Loser
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 700434448
+playerName - Hördsz
+playerPortalId - 5
+playerPortalUserId - 76561198847714470
+ret_msg - None
+
+************************************
+
+Account_Level - 675
+ActiveId1 - 11723
+ActiveId2 - 11683
+ActiveId3 - 0
+ActiveId4 - 0
+ActiveLevel1 - 2
+ActiveLevel2 - 1
+ActiveLevel3 - 0
+ActiveLevel4 - 0
+ActivePlayerId - 700956716
+Assists - 13
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2417
+Damage_Bot - 0
+Damage_Done_In_Hand - 94323
+Damage_Done_Magical - 0
+Damage_Done_Physical - 97083
+Damage_Mitigated - 0
+Damage_Player - 97083
+Damage_Taken - 55024
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 55024
+Deaths - 9
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 3195
+Gold_Per_Minute - 249
+Healing - 0
+Healing_Bot - 0
+Healing_Player_Self - 1033
+ItemId1 - 18773
+ItemId2 - 18809
+ItemId3 - 18797
+ItemId4 - 18801
+ItemId5 - 18765
+ItemId6 - 18816
+ItemLevel1 - 5
+ItemLevel2 - 5
+ItemLevel3 - 1
+ItemLevel4 - 3
+ItemLevel5 - 1
+ItemLevel6 - 0
+Item_Active_1 - Chronos
+Item_Active_2 - Resilience
+Item_Active_3 - 
+Item_Active_4 - 
+Item_Purch_1 - Swift Jade
+Item_Purch_2 - Divine Right
+Item_Purch_3 - Heir to the Throne
+Item_Purch_4 - Manifest Destiny
+Item_Purch_5 - Eagle's Emerald
+Item_Purch_6 - Alacrity
+Killing_Spree - 12
+Kills_Bot - 1
+Kills_Double - 0
+Kills_Fire_Giant - 1
+Kills_First_Blood - 0
+Kills_Gold_Fury - 1
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 12
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 65
+League_Points - 56
+League_Tier - 22
+League_Wins - 70
+Map_Game - Ranked Frog Isle
+Mastery_Level - 53
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - [{'merge_datetime': 'Feb 13 2019 10:27PM', 'playerId': '14760137', 'portalId': '1'}]
+Minutes - 12
+Multi_kill_Max - 2
+Objective_Assists - 25
+PartyId - 280797
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Lian
+Region - Brazil
+Skin - Merrymaker
+SkinId - 23865
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 2
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Loser
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 700956716
+playerName - antonio272
+playerPortalId - 5
+playerPortalUserId - 76561198069393365
+ret_msg - None
+
+************************************
+
+Account_Level - 999
+ActiveId1 - 13229
+ActiveId2 - 11826
+ActiveId3 - 11646
+ActiveId4 - 11683
+ActiveLevel1 - 1
+ActiveLevel2 - 1
+ActiveLevel3 - 0
+ActiveLevel4 - 1
+ActivePlayerId - 0
+Assists - 11
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2147
+Damage_Bot - 0
+Damage_Done_In_Hand - 61542
+Damage_Done_Magical - 0
+Damage_Done_Physical - 65827
+Damage_Mitigated - 0
+Damage_Player - 65827
+Damage_Taken - 73216
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 73216
+Deaths - 9
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 2877
+Gold_Per_Minute - 224
+Healing - 0
+Healing_Bot - 0
+Healing_Player_Self - 22146
+ItemId1 - 15056
+ItemId2 - 12697
+ItemId3 - 13354
+ItemId4 - 12628
+ItemId5 - 12890
+ItemId6 - 16392
+ItemLevel1 - 4
+ItemLevel2 - 1
+ItemLevel3 - 3
+ItemLevel4 - 2
+ItemLevel5 - 5
+ItemLevel6 - 0
+Item_Active_1 - Haven
+Item_Active_2 - Nimble
+Item_Active_3 - Master Riding
+Item_Active_4 - Resilience
+Item_Purch_1 - Deep Breath
+Item_Purch_2 - Leg Day
+Item_Purch_3 - Stomping Ground
+Item_Purch_4 - Vigor
+Item_Purch_5 - Reconstruction
+Item_Purch_6 - Bulk Up
+Killing_Spree - 7
+Kills_Bot - 0
+Kills_Double - 0
+Kills_Fire_Giant - 1
+Kills_First_Blood - 0
+Kills_Gold_Fury - 1
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 10
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 36
+League_Points - 70
+League_Tier - 23
+League_Wins - 47
+Map_Game - Ranked Frog Isle
+Mastery_Level - 49
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - None
+Minutes - 12
+Multi_kill_Max - 3
+Objective_Assists - 12
+PartyId - 280797
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Buck
+Region - Brazil
+Skin - Buck Wild
+SkinId - 17144
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 2
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Loser
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 0
+playerName - 
+playerPortalId - None
+playerPortalUserId - None
+ret_msg - None
+
+************************************
+
+Account_Level - 999
+ActiveId1 - 13165
+ActiveId2 - 11683
+ActiveId3 - 11646
+ActiveId4 - 0
+ActiveLevel1 - 2
+ActiveLevel2 - 0
+ActiveLevel3 - 0
+ActiveLevel4 - 0
+ActivePlayerId - 12097410
+Assists - 13
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2404
+Damage_Bot - 0
+Damage_Done_In_Hand - 68151
+Damage_Done_Magical - 0
+Damage_Done_Physical - 72608
+Damage_Mitigated - 64091
+Damage_Player - 72608
+Damage_Taken - 76845
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 76845
+Deaths - 7
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 2761
+Gold_Per_Minute - 215
+Healing - 0
+Healing_Bot - 0
+Healing_Player_Self - 486
+ItemId1 - 18363
+ItemId2 - 18389
+ItemId3 - 18336
+ItemId4 - 18340
+ItemId5 - 18364
+ItemId6 - 18556
+ItemLevel1 - 5
+ItemLevel2 - 1
+ItemLevel3 - 1
+ItemLevel4 - 4
+ItemLevel5 - 4
+ItemLevel6 - 0
+Item_Active_1 - Morale Boost
+Item_Active_2 - Resilience
+Item_Active_3 - Master Riding
+Item_Active_4 - 
+Item_Purch_1 - Siege Engine
+Item_Purch_2 - Trebuchet
+Item_Purch_3 - Heavy Metal
+Item_Purch_4 - Indomitable
+Item_Purch_5 - Ramparts
+Item_Purch_6 - Fortress Breaker
+Killing_Spree - 13
+Kills_Bot - 0
+Kills_Double - 0
+Kills_Fire_Giant - 1
+Kills_First_Blood - 0
+Kills_Gold_Fury - 1
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 5
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 128
+League_Points - 31
+League_Tier - 26
+League_Wins - 158
+Map_Game - Ranked Frog Isle
+Mastery_Level - 50
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - None
+Minutes - 12
+Multi_kill_Max - 1
+Objective_Assists - 73
+PartyId - 335904
+Platform - Steam
+Rank_Stat_League - 0
+Reference_Name - Ash
+Region - Brazil
+Skin - Golden Ash
+SkinId - 23073
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 2
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Loser
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 12097410
+playerName - Andsuzen
+playerPortalId - 5
+playerPortalUserId - 76561198426872622
+ret_msg - None
+
+************************************
+
+Account_Level - 194
+ActiveId1 - 13229
+ActiveId2 - 11683
+ActiveId3 - 0
+ActiveId4 - 0
+ActiveLevel1 - 1
+ActiveLevel2 - 1
+ActiveLevel3 - 0
+ActiveLevel4 - 0
+ActivePlayerId - 10885075
+Assists - 13
+BanId1 - 2249
+BanId2 - 2438
+BanId3 - 2288
+BanId4 - 2071
+BanId5 - 2538
+BanId6 - 2517
+Ban_1 - Kinessa
+Ban_2 - Strix
+Ban_3 - Makoa
+Ban_4 - Fernando
+Ban_5 - Yagorath
+Ban_6 - Io
+Camps_Cleared - 0
+ChampionId - 2479
+Damage_Bot - 0
+Damage_Done_In_Hand - 38732
+Damage_Done_Magical - 0
+Damage_Done_Physical - 42122
+Damage_Mitigated - 29824
+Damage_Player - 42122
+Damage_Taken - 104413
+Damage_Taken_Magical - 0
+Damage_Taken_Physical - 104413
+Deaths - 10
+Distance_Traveled - 0
+Entry_Datetime - 2/12/2022 1:45:58 AM
+Final_Match_Level - 0
+Gold_Earned - 2518
+Gold_Per_Minute - 196
+Healing - 6796
+Healing_Bot - 0
+Healing_Player_Self - 10850
+ItemId1 - 22873
+ItemId2 - 22877
+ItemId3 - 22878
+ItemId4 - 22874
+ItemId5 - 22872
+ItemId6 - 22890
+ItemLevel1 - 5
+ItemLevel2 - 1
+ItemLevel3 - 1
+ItemLevel4 - 3
+ItemLevel5 - 5
+ItemLevel6 - 0
+Item_Active_1 - Haven
+Item_Active_2 - Resilience
+Item_Active_3 - 
+Item_Active_4 - 
+Item_Purch_1 - Bloodthirst
+Item_Purch_2 - Hopeguard
+Item_Purch_3 - Ready for War
+Item_Purch_4 - Excessive Force
+Item_Purch_5 - Platemail
+Item_Purch_6 - Storm of Bullets
+Killing_Spree - 4
+Kills_Bot - 0
+Kills_Double - 0
+Kills_Fire_Giant - 1
+Kills_First_Blood - 0
+Kills_Gold_Fury - 1
+Kills_Penta - 0
+Kills_Phoenix - 0
+Kills_Player - 3
+Kills_Quadra - 0
+Kills_Siege_Juggernaut - 0
+Kills_Single - 0
+Kills_Triple - 0
+Kills_Wild_Juggernaut - 2
+League_Losses - 8
+League_Points - 62
+League_Tier - 19
+League_Wins - 9
+Map_Game - Ranked Frog Isle
+Mastery_Level - 51
+Match - 1154308432
+Match_Duration - 735
+MergedPlayers - [{'merge_datetime': 'Jun  8 2020 10:27PM', 'playerId': '720218237', 'portalId': '28'}]
+Minutes - 12
+Multi_kill_Max - 1
+Objective_Assists - 39
+PartyId - 336488
+Platform - Epic Games
+Rank_Stat_League - 0
+Reference_Name - Khan
+Region - Brazil
+Skin - Default Khan
+SkinId - 19895
+Structure_Damage - 0
+Surrendered - 0
+TaskForce - 2
+Team1Score - 4
+Team2Score - 2
+TeamId - 0
+Team_Name - 
+Time_In_Match_Seconds - 769
+Towers_Destroyed - 0
+Wards_Placed - 0
+Win_Status - Loser
+Winning_TaskForce - 1
+hasReplay - y
+hz_gamer_tag - None
+hz_player_name - None
+match_queue_id - 486
+name - Ranked
+playerId - 10885075
+playerName - Yaico10
+playerPortalId - 28
+playerPortalUserId - None
+ret_msg - None
