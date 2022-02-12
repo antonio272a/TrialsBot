@@ -1,6 +1,3 @@
-Docs/DocsDiscord/token.txt
-Docs/ApiTokens/hirezApiToken.txt
-.gitignore
 venv
 .idea
 __pycache
