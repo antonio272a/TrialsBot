@@ -1,51 +1,131 @@
 import pyrez
+import discord
+from ApiPaladinsSmite.images import ImgPaladins
+import os
 
 
-class PaladinsApi:
 
+
+def get_hirez_auth_key():
+    with open('./Docs/ApiTokens/hirezApiToken.txt', 'r') as f:
+        return f.readline()
+
+
+dev_id_hirez = "3656"
+auth_key_hirez = get_hirez_auth_key()
+paladins_req = pyrez.PaladinsAPI(devId=dev_id_hirez, authKey=auth_key_hirez)
+
+
+def get_match_inf(match_id):
+    return paladins_req.getMatch(match_id)
+
+
+def request_player_id_by_name(player_name):
+    player = paladins_req.getPlayerId(player_name)[0]
+    return f"Nick: {player['Name']} - Id: {player['player_id']}  "
+
+
+def get_champions():
+    champions = paladins_req.getChampions()
+    if not champions:
+        get_champions()
+    else:
+        return champions
+
+
+def get_itens():
+    itens = paladins_req.getItems()
+    if not itens:
+        get_itens()
+    else:
+        return itens
+
+# Funções prontas abaixo
+
+
+async def get_player_id_by_match(ctx, match_id, *_args):
     """
-    PT-BR: Classe usada para acessar a API do paladins através do wrapper Pyrez.
-    Obs.: nunca instancie os champions ou itens no construtor da classe, isso atrasa desnecessáriamente qualquer
-    outro comando além do ".image"
-    Obs.2: Os comandos para retornar os campeões e os itens tem a conferência com o if pois eventualmente eles podem
-    retornar vazios por erro na API, gerando um erro no bot.
+    :param match_id: |STR| or |INT|
 
-    EN-US: Class used to access the paladins API through the Pyrez wrapper.
-    Note: never instantiate champions or items in the class constructor, this unnecessarily delays any
-    another command besides ".image"
-    Note 2: The commands to return the champions and items have the check with the if because eventually they can
-    return empty by error on the API, generating an error on the bot.
+    PT-BR: retorna uma lista com os nicks, campeão utilizado e id dos players
+    Caso o player tenha conta privada, retorna o nick e o id com a string "Privado"
 
-    https://github.com/luissilva1044894/Pyrez
+    EN-US: returns a list with nicknames, champion used and players ids
+    If the player has a private account, it returns the nick and id with the string "Privado"
     """
-
-    def __init__(self):
-        self._dev_id_hirez = "3656"
-        self._auth_key_hirez = self._get_hirez_auth_key()
-        self._paladins_req = pyrez.PaladinsAPI(devId=self._dev_id_hirez, authKey=self._auth_key_hirez)
-
-    @staticmethod
-    def _get_hirez_auth_key():
-        with open('./Docs/ApiTokens/hirezApiToken', 'r') as f:
-            return f.readline()
-
-    def get_match_inf(self, match_id):
-        return self._paladins_req.getMatch(match_id)
-
-    def get_player_id_by_name(self, player_name):
-        player = self._paladins_req.getPlayerId(player_name)[0]
-        return f"Nick: {player['Name']} - Id: {player['player_id']}  "
-
-    def get_champions(self):
-        champions = self._paladins_req.getChampions()
-        if not champions:
-            self.get_champions()
+    match_inf = get_match_inf(match_id)
+    details_players = ""
+    index = 0  # Index usado para separar os times
+    for player in match_inf:  # Confere se a conta do player é privada, nome retorna vazio
+        if player["playerName"] == "":
+            player_name = "Privado"  # Troca nome vazio
+            player_id = "Privado"  # Troca Id 0
         else:
-            return champions
+            player_name = player["playerName"]
+            player_id = player["playerId"]
+        details_players += "\n" + player["Win_Status"] + " - " + "Nick: " + player_name + " - " + "Campeão: " + \
+                           player["Reference_Name"] + " - " + "id: " + player_id  # Adiciona stats na mensagem
+        index += 1
+        if index == 5:
+            details_players += "\n" + "\n" + "--------------------" + "\n"
+            # Se passar de 5 players, ele separa com a str acima para separar os times
+    await ctx.send(details_players)
 
-    def get_itens(self):
-        itens = self._paladins_req.getItems()
-        if not itens:
-            self.get_itens()
+
+async def get_player_id_by_name(ctx, player_name, *_args):
+    """
+    :param player_name: |STR|
+
+    PT-BR: Retorna o id do player mesmo que a conta seja privada
+
+    EN-US: Returns player id even if account is private
+    """
+    player_id = request_player_id_by_name(player_name)
+    await ctx.send(player_id)
+
+
+async def get_replay_status(ctx, match_id, *_args):
+    """
+    :param match_id: |STR| or |INT|
+
+    PT-BR: Verifica se a partida possui replay
+    EN-US: check if the match has replay
+    """
+    match_inf = get_match_inf(match_id)  # Instancia informações da partida
+    for player in match_inf:
+        if player["hasReplay"] == "y":  # Confere se tem replay
+            status_replay = "Possui Replay"
+            break
         else:
-            return itens
+            status_replay = "Não possui Replay"
+    await ctx.send(status_replay)
+
+
+async def get_stats_file(ctx, match_id, *_args):
+    """
+    :param match_id: |STR| or |INT|
+    """
+    match_inf = get_match_inf(match_id)  # instancia informações da partida
+    with open("./Docs/DocsHirez/stats-paladins.txt", 'w', encoding="UTF-8") as log:
+        for player in match_inf:  # Pra cada player dentro das infos
+            log.write('\n' + '\n' + '************************************' + '\n')  # Separa os players
+            for stat in player:  # Pra cada info dentro dos players
+                log.write('\n' + str(stat) + ' - ' + str(player[stat]))  # escreve info no doc
+    log.close()
+    with open("./Docs/DocsHirez/stats-paladins.txt", 'r') as file:  # Envia arquivo no discord
+        await ctx.send(file=discord.File(file, "stats paladins.txt"))
+
+
+async def get_image(ctx, match_id, winner_team, loser_team, *_args):
+    """
+    :param match_id: |STR| or |INT|
+    :param winner_team: |STR|
+    :param loser_team: |STR|
+    :param ctx: discord event context
+    """
+    match_inf = get_match_inf(match_id)
+    champions = get_champions()
+    itens = get_itens()
+    ImgPaladins(match_inf, champions, itens, winner_team or 'WIN', loser_team or 'LOS')
+    with open("./Images/Createdimages/paladins.png", 'rb') as file:
+        await ctx.channel.send(file=discord.File(file, "Image.png"))

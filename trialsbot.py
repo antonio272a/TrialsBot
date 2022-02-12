@@ -1,7 +1,10 @@
 import discord
-from Discord.__main__ import Comand
-import json
-from datetime import datetime
+from discord.ext import commands
+import Discord.discordcommands as admin
+import ApiBattlefy.battlefycommands as battlefy
+import ApiPaladinsSmite.paladinsapi as paladins
+import ApiPaladinsSmite.smiteapi as smite
+
 
 # Código para resgatar o token do Bot
 def read_token():
@@ -15,101 +18,225 @@ token = read_token()
 
 # Subindo o Bot no discord
 intents = discord.Intents.all()
-client = discord.Client(intents=intents)
+client = commands.Bot(intents=intents, command_prefix='.', help_command=None, case_insensitive=True)
 
 
-# Código quando é enviado uma mensagem ao Bot
 @client.event
-# Comandos
-async def on_ready():  # Quando o bot fica pronto
+async def on_ready():
     await client.change_presence(activity=discord.Game(name=".help"))  # Coloca a atividade do bot
     print("Ready")
-    print(datetime.now().strftime("%H:%M"))
 
-def teste():
-    print('teste')
+
+# @client.event
+# async def on_command(ctx):
+#     await ctx.send('Comando Recebio')
+
 
 @client.event
-async def on_message(message):  # Ao receber mensagem
-
-    """
-    PT-BR: Esse arquivo é para a execução do bot de discord e para receber as mensagens.
-    O "try" conferindo o retorno é para os casos que a mensagem para ser enviada de volta sejam arquvios
-    (.png ou .txt) já que não é possível puxar funções assíncronas de dentro de uma classe.
-    Nesses casos a classe retorna uma string específica.
-    Sobre o .help:
-    Não é possível (pelo menos que eu ainda tenha conseguido) retornar um objeto discord.Embed pela classe,
-    então o Embed está sendo criado nesse mesmo arquivo por enquanto.
-
-    EN-US: This file is for running the discord bot and for receiving messages.
-    The "try" checking the return is for cases where the message to be sent back is files
-    (.png or .txt) as it is not possible to pull asynchronous functions from within a class.
-    In these cases the class returns a specific string.
-    About .help:
-    It's not possible (at least I've still managed to) return a discord.Embed object by the class,
-    so Embed is being created in that same file for now.
-    """
-
-    if message.author.id != 838267456296189983:  # Confere se a mensagem não é do próprio bot
-        if message.content.startswith("."):
-            try:
-                await message.channel.send("Comando recebido")
-                retorno = Comand(message)
-                if str(retorno) == "help":
-                    await message.channel.send(embed=_help_command())
-                elif str(retorno) == "PaladinsFile":
-                    await Comand.send_file(message, "paladins")
-                elif str(retorno) == "PaladinsImage":
-                    await Comand.send_image(message, "paladins")
-                elif str(retorno) == "SmiteFile":
-                    await Comand.send_file(message, "smite")
-                elif str(retorno) == "SmiteImage":
-                    await Comand.send_image(message, "smite")
-                elif str(retorno) == 'Brackets':
-                    await send_message_to_f_a()
-                else:
-                    await message.channel.send(retorno)
-            except:
-                await message.channel.send("Ocorreu um erro, favor tentar novamente")
+async def on_command_error(ctx, error):
+    print(error)
+    await ctx.send('Algum erro ocorreu, favor conferir a formatação da mensagem e tente novamente')
 
 
-async def send_message_to_f_a():
-    with open('./Docs/DocsBattlefy/free-agents-discord.json', 'r') as f:
-        data = json.load(f)
-        agents_list = json.loads(data)
-    for player in agents_list:
-        username, team = player
-        name, discriminator = username.split('#')
-        user_id = await get_member(name, discriminator)
-        user = await client.fetch_user(user_id)
-        await user.send(f"Boa tarde <@{user_id}>, hoje no camepeonato da Trials, você jogará no time {team}")
+# ADMIN GROUP COMMANDS
 
 
-async def get_member(name, discriminator):
-    members = client.get_all_members()
-    for member in members:
-        if (member.discriminator == discriminator) and (member.name.upper() == name.upper()):
-            return member.id
+@client.group(name='admin', invoke_without_command=True)
+async def admin_cmd(ctx):
+    embed = discord.Embed(title='Comandos Admin',
+                          description="Grupo de comandos para a administração do Bot \n"
+                          "Formato dos comandos: _**.admin subcomando <parâmetros>**_",
+                          colour=16711680)
+    embed.add_field(name='addthischannel',
+                    value='Adiciona o canal atual na whitelist',
+                    inline=False)
+    embed.add_field(name='addchannelid <channel_id>',
+                    value='Adiciona na whitelist o canal especificado como parâmetro',
+                    inline=False)
+    embed.add_field(name='removethischannel',
+                    value='Remove o canal atual da whitelist',
+                    inline=False)
+    embed.add_field(name='removechannelid  <channel_id>',
+                    value='Remove da whitelist o canal especificado como parâmetro',
+                    inline=False)
+    await ctx.send(embed=embed)
 
 
+@admin_cmd.command(name="addthischannel")
+async def admin_addthischannel(ctx):
+    channel_id = ctx.channel.id
+    await admin.add_channel_to_whitelist(ctx, channel_id)
 
-def _help_command():
+
+@admin_cmd.command(name='addchannelid')
+async def admin_addchannelid(ctx, channel_id):
+    await admin.add_channel_to_whitelist(ctx, channel_id)
+
+
+@admin_cmd.command(name='removethischannel')
+async def admin_removethischannel(ctx):
+    channel_id = ctx.channel.id
+    await admin.remove_channel_from_whitelist(ctx, channel_id)
+
+
+@admin_cmd.command(name='removechannelid')
+async def admin_removechannel_id(ctx, channel_id):
+    await admin.remove_channel_from_whitelist(ctx, channel_id)
+
+
+# BATTLEFY GROUP COMMANDS
+
+
+@client.group(name="battlefy", invoke_without_command=True)
+async def battlefy_cmd(ctx):
+    embed = discord.Embed(title='Coamndos Battlefy',
+                          description='Grupo de comandos para interagir com a Api do Battlefy \n'
+                                      'Formato dos comandos: _**.battlefy subcomando <parâmetros>**_',
+                          colour=16711680)
+    embed.add_field(name='closed <tournament_id>',
+                    value='Salve os agentes livres inscritos no torneio especificado \n'
+                          '**Obs.: Usar somente no fechamento das inscrições**',
+                    inline=False)
+    embed.add_field(name='release <tournament_id>',
+                    value='Envia as mensagens para os agentes livres que estão em time \n'
+                          '**Obs.:** Caso não encontre o discord de algum agente, o bot retorna um aviso',
+                    inline=False)
+    await ctx.send(embed=embed)
+
+
+@battlefy_cmd.command(name="closed")
+async def battlefy_closed_registrations(ctx, tournament_id):
+    await battlefy.on_registrations_close(ctx, tournament_id)
+
+
+@battlefy_cmd.command(name="release")
+async def battlefy_brackets_release(ctx, tournament_id):
+    await battlefy.on_brackets_release(ctx, client, tournament_id)
+
+
+# PALADINS GROUP COMMANDS
+
+@client.group(name="paladins", invoke_without_command=True)
+async def paladins_cmd(ctx):
+    embed = discord.Embed(title='Comandos Paladins',
+                          description='Grupo de comandos para interagir com a Api do Paladins \n'
+                                      'Formato dos comandos: _**.paladins subcomando <parâmetros>**_',
+                          colour=16711680)
+    embed.add_field(name='id <match_id>',
+                    value='Retorna uma lista de todos os id\'s dos jogadores presentes na partida de acordo com o '
+                          'id passado como parâmetro. \n'
+                          '**Obs.:** Não retorna Id\'s de contas privadas',
+                    inline=False)
+    embed.add_field(name='image <match_id> <team_1> <team_2>',
+                    value='Retorna uma imagem de final de partida de acordo com o id passado como parâmetro \n'
+                          'os parâmetros "team_1" e "team_2" são as siglas dos times que ficarão ao lado dos nomes '
+                          'dos jogadores \n'
+                          '**Obs.:** Caso as siglas dos times não sejam passadas, serão usadas as siglas "WIN" e "LOS"',
+                    inline=False)
+    embed.add_field(name='player_id <player_name>',
+                    value='Retorna o id do jogador de acordo com o nick especificado',
+                    inline=False)
+    embed.add_field(name='replay <match_id>',
+                    value='Retorna um texto indicando se a partida do id passado como parâmetro possui replay gravado '
+                          'no servidor da Hi-rez',
+                    inline=False)
+    embed.add_field(name='stats <match_id>',
+                    value='retorna um documento de texto com todos os stats da partida especificada',
+                    inline=False)
+    await ctx.send(embed=embed)
+
+
+@paladins_cmd.command(name="image")
+async def paladins_img_cmd(ctx, match_id, team_1, team_2):
+    await paladins.get_image(ctx, match_id, team_1, team_2)
+
+
+@paladins_cmd.command(name="id")
+async def paladins_id_cmd(ctx, match_id):
+    await paladins.get_player_id_by_match(ctx, match_id)
+
+
+@paladins_cmd.command(name="stats")
+async def paladins_stats_cmd(ctx, match_id):
+    await paladins.get_stats_file(ctx, match_id)
+
+
+@paladins_cmd.command(name="replay")
+async def paladins_replay_cmd(ctx, match_id):
+    await paladins.get_replay_status(ctx, match_id)
+
+
+@paladins_cmd.command(name="player_id")
+async def paladins_player_id_cmd(ctx, player_name):
+    await paladins.get_player_id_by_name(ctx, player_name)
+
+
+# SMITE GROUP COMMANDS
+
+
+@client.group(name="smite", invoke_without_command=True)
+async def smite_cmd(ctx):
+    embed = discord.Embed(title='Comandos Smite',
+                          description='Grupo de comandos para interagir com a Api do Smite \n'
+                                      'Formato dos comandos: _**.smite subcomando <parâmetros>**_',
+                          colour=16711680)
+    embed.add_field(name='id <match_id>',
+                    value='Retorna uma lista de todos os id\'s dos jogadores presentes na partida de acordo com o '
+                          'id passado como parâmetro. \n'
+                          '**Obs.:** Não retorna Id\'s de contas privadas',
+                    inline=False)
+    embed.add_field(name='image <match_id>',
+                    value='Retorna uma imagem de final de partida de acordo com o id passado como parâmetro',
+                    inline=False)
+    embed.add_field(name='player_id <player_name>',
+                    value='Retorna o id do jogador de acordo com o nick especificado',
+                    inline=False)
+    embed.add_field(name='replay <match_id>',
+                    value='Retorna um texto indicando se a partida do id passado como parâmetro possui replay gravado '
+                          'no servidor da Hi-rez',
+                    inline=False)
+    embed.add_field(name='stats <match_id>',
+                    value='retorna um documento de texto com todos os stats da partida especificada',
+                    inline=False)
+    await ctx.send(embed=embed)
+
+
+@smite_cmd.command(name="image")
+async def smite_img_cmd(ctx, match_id):
+    await smite.get_image(ctx, match_id)
+
+
+@smite_cmd.command(name="id")
+async def smite_id_cmd(ctx, match_id):
+    await smite.get_player_id_by_match(ctx, match_id)
+
+
+@smite_cmd.command(name="stats")
+async def smite_stats_cmd(ctx, match_id):
+    await smite.get_stats_file(ctx, match_id)
+
+
+@smite_cmd.command(name="replay")
+async def smite_replay_cmd(ctx, match_id):
+    await smite.get_replay_status(ctx, match_id)
+
+
+@smite_cmd.command(name="player_id")
+async def smite_player_id_cmd(ctx, player_name):
+    await smite.get_player_id_by_name(ctx, player_name)
+
+
+@client.command(pass_context=True, name="help")
+async def help_cmd(ctx):
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
                           description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
-                                      'comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n '
-                                      '.stats-paladins ou .stats-smite',
+                                      'comando estão separados por categoria, para maiores informações '
+                                      'coloque os comandos base para maiores informações ex.: **.admin**',
                           colour=16711680)
-    embed.add_field(name=".stats", value="Retorna o arquivo de texto com todos os stats da partida")
-    embed.add_field(name=".id", value="Retorna os Id's de todos os jogadores, com exceção dos perfil privados")
-    embed.add_field(name=".playerid", value="Retorna o Id do nick enviado")
-    embed.add_field(name=".replay",
-                    value="Renorna os players da partida pra conferência, junto com a informação de caso a "
-                          "partida tenha Replay ou não")
-    embed.add_field(name=".image", value="Retorna a imagem dos stats da partida. Caso seja paladins, envie os times"
-                                         "junto da mensagem no formato \".image-paladins (id) WIN LOS \", com o "
-                                         "\"WIN\" e \"LOS\" sendo as siglas dos times")
-    return embed
+    embed.add_field(name=".admin", value="Grupo de comandos separado para a administração do Bot", inline=False)
+    embed.add_field(name=".battlefy", value="Comandos para interagir com os torneios do Battlefy", inline=False)
+    embed.add_field(name=".paladins", value="Comandos para interagir com a API do Paladins", inline=False)
+    embed.add_field(name=".smite", value="Comandos para interagir com a API do Smite", inline=False)
+    await ctx.send(embed=embed)
 
-
-# Código para executar o Bot com as configurações pré-definidas
 client.run(token)
