@@ -18,13 +18,18 @@ token = read_token()
 
 # Subindo o Bot no discord
 intents = discord.Intents.all()
-client = commands.Bot(intents=intents, command_prefix='.')
+client = commands.Bot(intents=intents, command_prefix='.', help_command=None, case_insensitive=True)
 
 
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Game(name=".help"))  # Coloca a atividade do bot
     print("Ready")
+
+
+@client.event
+async def on_command(ctx):
+    await ctx.send('Comando Recebio')
 
 
 @client.command(pass_context=True)
@@ -81,8 +86,8 @@ async def smite(ctx, command, param_1=''):
     await smite_commands[command](ctx, param_1)
 
 
-@client.command(pass_context=True)
-async def help_trials(ctx):
+@client.command(pass_context=True, name="help")
+async def help_cmd(ctx):
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
                           description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
                                       'comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n '

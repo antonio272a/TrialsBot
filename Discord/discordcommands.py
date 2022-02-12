@@ -1,4 +1,4 @@
-from Discord.verify import Verify
+from Discord.verify import *
 from Utils.iterator import LineRemove
 
 channel_whitelist = "./Docs/DocsDiscord/Whitelists/channel_whitelist.txt"
@@ -13,7 +13,7 @@ def add_channel_to_whitelist(channel_id):
     EN-US: Check if the channel is listed, if not, open the file as "a" mode and add the channel
     and a line break.
     """
-    channel_whitelisted = Verify.verify_channel(channel_id)
+    channel_whitelisted = verify_channel(channel_id)
     if not channel_whitelisted:
         with open(channel_whitelist, "a") as whitelist_doc:
             whitelist_doc.write(str(channel_id) + "\n")
@@ -30,7 +30,7 @@ def remove_channel_from_whitelist(channel_id):
     EN-US: Check if the channel is listed, if it is, use the LineRemove class(created to avoid MemoryError problems)
     to remove only the desired channel, more details about the class in the iterator.py file
     """
-    channel_whitelisted = Verify.verify_channel(channel_id)
+    channel_whitelisted = verify_channel(channel_id)
     if channel_whitelisted:
         with open(channel_whitelist, "w") as whitelist_doc:
             for channel in LineRemove(channel_whitelist, channel_id):
