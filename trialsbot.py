@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 import Discord.discordcommands as admin
 import ApiBattlefy.battlefycommands as battlefy
-import ApiPaladinsSmite.paladinsapi as paladins
-import ApiPaladinsSmite.smiteapi as smite
+import ApiPaladinsSmite.paladinscommands as paladins
+import ApiPaladinsSmite.smitecommands as smite
 
 
 # Código para resgatar o token do Bot
@@ -147,7 +147,7 @@ async def paladins_cmd(ctx):
 
 
 @paladins_cmd.command(name="image")
-async def paladins_img_cmd(ctx, match_id, team_1, team_2):
+async def paladins_img_cmd(ctx, match_id, team_1='', team_2=''):
     await paladins.get_image(ctx, match_id, team_1, team_2)
 
 
