@@ -16,7 +16,7 @@ def add_channel_to_whitelist(channel_id):
     channel_whitelisted = Verify.verify_channel(channel_id)
     if not channel_whitelisted:
         with open(channel_whitelist, "a") as whitelist_doc:
-            whitelist_doc.write(channel_id + "\n")
+            whitelist_doc.write(str(channel_id) + "\n")
         return "Canal adicionado com sucesso"
     else:
         return "Canal já presente na whitelist"

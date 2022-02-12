@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
-from Discord.discordcommands import *
-from ApiBattlefy.battlefycommands import *
+import Discord.discordcommands as Admin
+import ApiBattlefy.battlefycommands as Battlefy
+import ApiPaladinsSmite.paladinsapi as Paladins
+import ApiPaladinsSmite.smiteapi as Smite
 
 
 # Código para resgatar o token do Bot
@@ -28,14 +30,14 @@ async def on_ready():
 @client.command(pass_context=True)
 async def admin(ctx, command, param=""):
     admin_commands = {
-        'addthischannel': add_channel_to_whitelist,
-        'removethischannel': remove_channel_from_whitelist,
-        'removechannelid': remove_channel_from_whitelist,
-        'addchannelid': add_channel_to_whitelist
+        'addthischannel': Admin.add_channel_to_whitelist,
+        'removethischannel': Admin.remove_channel_from_whitelist,
+        'removechannelid': Admin.remove_channel_from_whitelist,
+        'addchannelid': Admin.add_channel_to_whitelist
     }
     channel_id = param or ctx.channel.id
     try:
-        result = admin_commands[command](channel_id)
+        result = admin_commands[command](str(channel_id))
         await ctx.send(result)
     except:
         await ctx.send('Algum erro ocorreu, favor converir a formatação da mensagem')
@@ -44,22 +46,43 @@ async def admin(ctx, command, param=""):
 @client.command(pass_context=True)
 async def battlefy(ctx, command, tournament_id):
     batltefy_commands = {
-        'closed': on_registrations_close,
-        'release': on_brackets_release
+        'closed': Battlefy.on_registrations_close,
+        'release': Battlefy.on_brackets_release
         }
     message = batltefy_commands[command](tournament_id)
     if message:
         await ctx.send(message)
     else:
-        await send_message_to_f_a(ctx, client)
+        await battlefy.send_message_to_f_a(ctx, client)
         await ctx.send('mensagens enviadas')
 
 
 @client.command(pass_context=True)
-async def paladins(ctx, command, param=""):
-    pass
+async def paladins(ctx, command, param_1='', param_2='', param_3=''):
+    paladins_commands = {
+        'image': Paladins.get_image,
+        'id': Paladins.get_player_id_by_match,
+        'stats': Paladins.get_stats_file,
+        'replay': Paladins.get_replay_status,
+        'player_id': Paladins.get_player_id_by_name
+    }
+    await paladins_commands[command](ctx, param_1, param_2, param_3)
 
-def _help_command():
+
+@client.command(pass_context=True)
+async def smite(ctx, command, param_1=''):
+    smite_commands = {
+        'image': Smite.get_image,
+        'id': Smite.get_player_id_by_match,
+        'stats': Smite.get_stats_file,
+        'replay': Smite.get_replay_status,
+        'player_id': Smite.get_player_id_by_name
+    }
+    await smite_commands[command](ctx, param_1)
+
+
+@client.command(pass_context=True)
+async def help_trials(ctx):
     embed = discord.Embed(title="Central de Ajuda do TrialsBot",
                           description='Alguns comandos para facilitar a moderação \n Lembrando que todos os '
                                       'comando devem ser seguidos por pelo jogo com o "-jogo", por exemplo: \n '
@@ -74,8 +97,7 @@ def _help_command():
     embed.add_field(name=".image", value="Retorna a imagem dos stats da partida. Caso seja paladins, envie os times"
                                          "junto da mensagem no formato \".image-paladins (id) WIN LOS \", com o "
                                          "\"WIN\" e \"LOS\" sendo as siglas dos times")
-    return embed
+    await ctx.send(embed=embed)
 
 
-# Código para executar o Bot com as configurações pré-definidas
 client.run(token)
