@@ -1,4 +1,4 @@
-from ApiBattlefy.__main__ import *
+from ApiBattlefy.battlefyfunctions import *
 import json
 
 
