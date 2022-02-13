@@ -10,7 +10,9 @@ class Admin(commands.Cog):
         self.client = client
 
     async def cog_check(self, ctx):
-        return verify_user(ctx.message.author.id)
+        if ctx.subcommand_passed:
+            return verify_user(ctx.message.author.id)
+        return True
 
     async def cog_command_error(self, ctx, error):
         if type(error) == commands.CheckFailure:
