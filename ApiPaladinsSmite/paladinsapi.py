@@ -1,9 +1,4 @@
 import pyrez
-import discord
-from ApiPaladinsSmite.images import ImgPaladins
-import os
-
-
 
 
 def get_hirez_auth_key():

@@ -20,7 +20,7 @@ class ImgPaladins:
         self.match_inf = match_inf
         self.champions = champions
         self.itens = itens
-        self.font = ImageFont.truetype("./Docs/Fonts/Arial.ttf", 16)
+        self.font = ImageFont.truetype("./Docs/Fonts/MegabyteMedium.otf", 20)
         self.kda_list = ["Kills_Player", "Deaths", "Assists"]
         self.icons_id_list = self._create_id_list()
         self.stats_list = self._create_stats_list()

@@ -1,4 +1,7 @@
+import discord
 from ApiPaladinsSmite.paladinsapi import *
+from ApiPaladinsSmite.images import ImgPaladins
+
 
 
 async def get_player_id_by_match(ctx, match_id, *_args):
