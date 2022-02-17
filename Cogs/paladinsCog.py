@@ -14,12 +14,12 @@ class Paladins(commands.Cog):
             return verify_channel(ctx.channel.id)
         return True
 
-    # async def cog_command_error(self, ctx, error):
-    #     print(error)
-    #     if type(error) == commands.CheckFailure:
-    #         await ctx.send('Esse canal não possui permissão para executar esse comando')
-    #     else:
-    #         await ctx.send('Algum erro ocorreu, favor conferir a formatação da mensagem e tente novamente')
+    async def cog_command_error(self, ctx, error):
+        print(error)
+        if type(error) == commands.CheckFailure:
+            await ctx.send('Esse canal não possui permissão para executar esse comando')
+        else:
+            await ctx.send('Algum erro ocorreu, favor conferir a formatação da mensagem e tente novamente')
 
     @commands.command(name='test')
     async def test(self, ctx):
