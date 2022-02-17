@@ -1,12 +1,10 @@
 import os
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Atribuindo o token à uma variavel
-token = os.getenv('TOKEN');
+token = os.environ.get('TOKEN');
+print(token)
 
 # Subindo o Bot no discord
 intents = discord.Intents.all()
