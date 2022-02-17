@@ -1,13 +1,9 @@
 import pyrez
+import os
 
 
-def get_hirez_auth_key():
-    with open('./Docs/ApiTokens/hirezApiToken.txt', 'r') as f:
-        return f.readline()
-
-
-dev_id_hirez = "3656"
-auth_key_hirez = get_hirez_auth_key()
+dev_id_hirez = os.environ.get('HIREZ_DEV_ID')
+auth_key_hirez = os.environ.get('HIREZ_AUTH_KEY')
 paladins_req = pyrez.PaladinsAPI(devId=dev_id_hirez, authKey=auth_key_hirez)
 
 

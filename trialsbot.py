@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 
 # Atribuindo o token à uma variavel
-token = os.environ.get('TOKEN');
+token = os.environ.get('DS_TOKEN');
 print(token)
 
 # Subindo o Bot no discord
