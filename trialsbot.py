@@ -1,17 +1,12 @@
 import os
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
-
-# Código para resgatar o token do Bot
-def read_token():
-    with open("./Docs/DocsDiscord/token.txt", "r") as f:
-        lines = f.readlines()
-        return lines[0].strip()
-
+load_dotenv()
 
 # Atribuindo o token à uma variavel
-token = read_token()
+token = os.getenv('TOKEN');
 
 # Subindo o Bot no discord
 intents = discord.Intents.all()
