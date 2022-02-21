@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 
 # Atribuindo o token à uma variavel
-token = os.environ.get('DS_TOKEN');
+token = os.environ.get('DS_TOKEN')
 
 # Subindo o Bot no discord
 intents = discord.Intents.all()
@@ -18,7 +18,6 @@ async def on_ready():
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'Cogs.{filename[:-3]}')
-
 
 @client.command(pass_context=True, name="help")
 async def help_cmd(ctx):

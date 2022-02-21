@@ -21,10 +21,6 @@ class Paladins(commands.Cog):
         else:
             await ctx.send('Algum erro ocorreu, favor conferir a formatação da mensagem e tente novamente')
 
-    @commands.command(name='test')
-    async def test(self, ctx):
-        await ctx.send('tested')
-
     @commands.group(name="paladins", invoke_without_command=True)
     async def paladins_cmd(self, ctx):
         embed = discord.Embed(title='Comandos Paladins',

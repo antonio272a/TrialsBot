@@ -7,11 +7,11 @@ auth_key_hirez = os.environ.get('HIREZ_AUTH_KEY')
 smite_req = pyrez.SmiteAPI(devId=dev_id_hirez, authKey=auth_key_hirez)
 
 
-def get_match_inf(match_id):
+def get_match_inf(match_id: str):
     return smite_req.getMatch(match_id)
 
 
-def get_player_id_by_name(player_name):
+def get_player_id_by_name(player_name: str):
     return smite_req.getPlayerId(player_name)
 
 
