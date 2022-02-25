@@ -1,41 +1,54 @@
 import discord
 import io
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageOps
 
 paste_reference = {
-  1: [92, 187],
-  2: [92, 337],
-  3: [92, 487],
-  4: [92, 637],
-  5: [92, 787],
-  6: [92, 937],
-  7: [996, 187],
-  8: [996, 337],
-  9: [996, 487],
-  10: [996, 637],
-  11: [996, 787],
-  12: [996, 937],
+  1: (54, 160),
+  2: (364, 161),
+  3: (674, 161),
+  4: (984, 160),
+  5: (1293, 161),
+  6: (1604, 161),
+  7: (54, 478),
+  8: (364, 478),
+  9: (674, 478),
+  10: (984, 478),
+  11: (1293, 478),
+  12: (1604, 478),
+  13: (54, 793),
+  14: (364, 793),
 }
 
-def draw_banned_map(draw, font, banned_map):
+def draw_on_map(bkg, image, banned_map):
   box = paste_reference[banned_map]
-  paste_box = [box[0] + 78, box[1] + 55]
-  draw.text(paste_box, 'X', (0, 0, 0), font, anchor='mm')
-  
+  bkg.paste(image, box, mask=image)
 
-def draw_picked_map(draw, font, picked_map):
-  box = paste_reference[picked_map]
-  paste_box = [box[0] + 78, box[1] + 55]
-  draw.text(paste_box, 'O', (0, 255, 0), font, anchor='mm')
+def create_pick_image():
+  base = Image.new('RGBA', (252, 252), (0, 0, 0, 0))
+  img_with_border = ImageOps.expand(base, border=10, fill=(0, 255, 12))
+  return img_with_border
+
+# bkg = Image.open('../Images/mapPickBan/Mapas-PLL.png')
+# image = create_pick_image()
+# # ban_image = Image.open('../Images/mapPickBan/ban-mapa.png')
+# ban_image = Image.new('RGB', (263,263), (0,0,0))
+# for box in paste_reference.values():
+#   bkg.paste(ban_image, box)
+
+# bkg.save('./image.png')
 
 async def sendPickBanImage(ctx, banned_maps, picked_maps):
   bkg = Image.open("./Images/mapPickBan/Mapas-PLL.png")
-  font = ImageFont.truetype("./Docs/Fonts/Arial.ttf", 200)
-  draw = ImageDraw.Draw(bkg)
+  ban_image = Image.open('./Images/mapPickBan/ban-mapa.png')
+  
+  pick_image = create_pick_image()
+  
   for banned_map in banned_maps:
-    draw_banned_map(draw, font, banned_map)
+    draw_on_map(bkg, ban_image, banned_map)
+  
   for picked_map in picked_maps:
-    draw_picked_map(draw, font, picked_map)
+    draw_on_map(bkg, pick_image, picked_map)
+  
   with io.BytesIO() as image_binary:
     bkg.save(image_binary, 'PNG')
     image_binary.seek(0)
